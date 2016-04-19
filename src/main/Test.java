@@ -18,7 +18,7 @@ public class Test {
 	public static void main(String[] args) {
 
 		try {
-			WXhelper.getSearchList("YUEXIN-KTV-INFO");
+			WXhelper.getSearchList("headline_today");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -6,6 +6,10 @@
 
 package ui;
 
+import javax.swing.JFrame;
+
+import utils.FrameUtil;
+
 /**
  *
  * @author  __USER__
@@ -15,6 +19,7 @@ public class CwqJpanel extends javax.swing.JPanel {
 	/** Creates new form CwqJpanel */
 	public CwqJpanel() {
 		initComponents();
+	
 	}
 
 	/** This method is called from within the constructor to
@@ -27,28 +32,684 @@ public class CwqJpanel extends javax.swing.JPanel {
 	private void initComponents() {
 
 		jLabel1 = new javax.swing.JLabel();
+		jLabel2 = new javax.swing.JLabel();
+		jLabel3 = new javax.swing.JLabel();
+		jLabel4 = new javax.swing.JLabel();
+		jLabel5 = new javax.swing.JLabel();
+		jLabel6 = new javax.swing.JLabel();
+		jLabel7 = new javax.swing.JLabel();
+		jLabel8 = new javax.swing.JLabel();
+		jLabel9 = new javax.swing.JLabel();
+		jLabel10 = new javax.swing.JLabel();
+		jLabel11 = new javax.swing.JLabel();
+		jLabel12 = new javax.swing.JLabel();
+		jLabel13 = new javax.swing.JLabel();
+		jLabel14 = new javax.swing.JLabel();
+		jLabel15 = new javax.swing.JLabel();
+		jLabel16 = new javax.swing.JLabel();
+		jLabel17 = new javax.swing.JLabel();
+		jLabel18 = new javax.swing.JLabel();
+		jLabel19 = new javax.swing.JLabel();
+		jLabel20 = new javax.swing.JLabel();
+		jLabel21 = new javax.swing.JLabel();
+		jLabel22 = new javax.swing.JLabel();
+		jLabel23 = new javax.swing.JLabel();
+		jLabel24 = new javax.swing.JLabel();
+		jLabel25 = new javax.swing.JLabel();
+		jLabel26 = new javax.swing.JLabel();
+		jLabel27 = new javax.swing.JLabel();
+		jLabel28 = new javax.swing.JLabel();
+		jLabel29 = new javax.swing.JLabel();
+		jLabel30 = new javax.swing.JLabel();
+
+		setBackground(new java.awt.Color(0, 204, 102));
+		setMaximumSize(new java.awt.Dimension(500, 300));
+		setMinimumSize(new java.awt.Dimension(500, 300));
 
 		jLabel1.setText("o oo o ");
 
+		jLabel2.setText("o oo o ");
+
+		jLabel3.setText("o oo o ");
+
+		jLabel4.setText("o oo o ");
+
+		jLabel5.setText("o oo o ");
+
+		jLabel6.setText("o oo o ");
+
+		jLabel7.setText("o oo o ");
+
+		jLabel8.setText("o oo o ");
+
+		jLabel9.setText("o oo o ");
+
+		jLabel10.setText("o oo o ");
+
+		jLabel11.setText("o oo o ");
+
+		jLabel12.setText("o oo o ");
+
+		jLabel13.setText("o oo o ");
+
+		jLabel14.setText("o oo o ");
+
+		jLabel15.setText("o oo o ");
+
+		jLabel16.setText("o oo o ");
+
+		jLabel17.setText("o oo o ");
+
+		jLabel18.setText("o oo o ");
+
+		jLabel19.setText("o oo o ");
+
+		jLabel20.setText("o oo o ");
+
+		jLabel21.setText("o oo o ");
+
+		jLabel22.setText("o oo o ");
+
+		jLabel23.setText("o oo o ");
+
+		jLabel24.setText("o oo o ");
+
+		jLabel25.setText("o oo o ");
+
+		jLabel26.setText("o oo o ");
+
+		jLabel27.setText("o oo o ");
+
+		jLabel28.setText("o oo o ");
+
+		jLabel29.setText("o oo o ");
+
+		jLabel30.setText("o oo o ");
+
 		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
 		this.setLayout(layout);
-		layout.setHorizontalGroup(layout.createParallelGroup(
-				javax.swing.GroupLayout.Alignment.LEADING).addGroup(
-				javax.swing.GroupLayout.Alignment.TRAILING,
-				layout.createSequentialGroup()
-						.addContainerGap(242, Short.MAX_VALUE)
-						.addComponent(jLabel1).addGap(114, 114, 114)));
-		layout.setVerticalGroup(layout.createParallelGroup(
-				javax.swing.GroupLayout.Alignment.LEADING).addGroup(
-				layout.createSequentialGroup().addGap(125, 125, 125)
-						.addComponent(jLabel1)
-						.addContainerGap(158, Short.MAX_VALUE)));
+		layout.setHorizontalGroup(layout
+				.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+				.addGroup(
+						layout.createSequentialGroup().addGap(21, 21, 21)
+								.addComponent(jLabel1)
+								.addContainerGap(637, Short.MAX_VALUE))
+				.addGroup(
+						layout.createParallelGroup(
+								javax.swing.GroupLayout.Alignment.LEADING)
+								.addGroup(
+										layout.createSequentialGroup()
+												.addGap(31, 31, 31)
+												.addComponent(jLabel2)
+												.addContainerGap(627,
+														Short.MAX_VALUE)))
+				.addGroup(
+						layout.createParallelGroup(
+								javax.swing.GroupLayout.Alignment.LEADING)
+								.addGroup(
+										layout.createSequentialGroup()
+												.addGap(41, 41, 41)
+												.addComponent(jLabel3)
+												.addContainerGap(617,
+														Short.MAX_VALUE)))
+				.addGroup(
+						layout.createParallelGroup(
+								javax.swing.GroupLayout.Alignment.LEADING)
+								.addGroup(
+										layout.createSequentialGroup()
+												.addGap(51, 51, 51)
+												.addComponent(jLabel4)
+												.addContainerGap(607,
+														Short.MAX_VALUE)))
+				.addGroup(
+						layout.createParallelGroup(
+								javax.swing.GroupLayout.Alignment.LEADING)
+								.addGroup(
+										layout.createSequentialGroup()
+												.addGap(61, 61, 61)
+												.addComponent(jLabel5)
+												.addContainerGap(597,
+														Short.MAX_VALUE)))
+				.addGroup(
+						layout.createParallelGroup(
+								javax.swing.GroupLayout.Alignment.LEADING)
+								.addGroup(
+										layout.createSequentialGroup()
+												.addGap(71, 71, 71)
+												.addComponent(jLabel6)
+												.addContainerGap(587,
+														Short.MAX_VALUE)))
+				.addGroup(
+						layout.createParallelGroup(
+								javax.swing.GroupLayout.Alignment.LEADING)
+								.addGroup(
+										layout.createSequentialGroup()
+												.addGap(81, 81, 81)
+												.addComponent(jLabel7)
+												.addContainerGap(577,
+														Short.MAX_VALUE)))
+				.addGroup(
+						layout.createParallelGroup(
+								javax.swing.GroupLayout.Alignment.LEADING)
+								.addGroup(
+										layout.createSequentialGroup()
+												.addGap(91, 91, 91)
+												.addComponent(jLabel8)
+												.addContainerGap(567,
+														Short.MAX_VALUE)))
+				.addGroup(
+						layout.createParallelGroup(
+								javax.swing.GroupLayout.Alignment.LEADING)
+								.addGroup(
+										layout.createSequentialGroup()
+												.addGap(101, 101, 101)
+												.addComponent(jLabel9)
+												.addContainerGap(557,
+														Short.MAX_VALUE)))
+				.addGroup(
+						layout.createParallelGroup(
+								javax.swing.GroupLayout.Alignment.LEADING)
+								.addGroup(
+										layout.createSequentialGroup()
+												.addGap(111, 111, 111)
+												.addComponent(jLabel10)
+												.addContainerGap(547,
+														Short.MAX_VALUE)))
+				.addGroup(
+						layout.createParallelGroup(
+								javax.swing.GroupLayout.Alignment.LEADING)
+								.addGroup(
+										layout.createSequentialGroup()
+												.addGap(121, 121, 121)
+												.addComponent(jLabel11)
+												.addContainerGap(537,
+														Short.MAX_VALUE)))
+				.addGroup(
+						layout.createParallelGroup(
+								javax.swing.GroupLayout.Alignment.LEADING)
+								.addGroup(
+										layout.createSequentialGroup()
+												.addGap(131, 131, 131)
+												.addComponent(jLabel12)
+												.addContainerGap(527,
+														Short.MAX_VALUE)))
+				.addGroup(
+						layout.createParallelGroup(
+								javax.swing.GroupLayout.Alignment.LEADING)
+								.addGroup(
+										layout.createSequentialGroup()
+												.addGap(141, 141, 141)
+												.addComponent(jLabel13)
+												.addContainerGap(517,
+														Short.MAX_VALUE)))
+				.addGroup(
+						layout.createParallelGroup(
+								javax.swing.GroupLayout.Alignment.LEADING)
+								.addGroup(
+										layout.createSequentialGroup()
+												.addGap(151, 151, 151)
+												.addComponent(jLabel14)
+												.addContainerGap(507,
+														Short.MAX_VALUE)))
+				.addGroup(
+						layout.createParallelGroup(
+								javax.swing.GroupLayout.Alignment.LEADING)
+								.addGroup(
+										layout.createSequentialGroup()
+												.addGap(161, 161, 161)
+												.addComponent(jLabel15)
+												.addContainerGap(497,
+														Short.MAX_VALUE)))
+				.addGroup(
+						layout.createParallelGroup(
+								javax.swing.GroupLayout.Alignment.LEADING)
+								.addGroup(
+										layout.createSequentialGroup()
+												.addGap(171, 171, 171)
+												.addComponent(jLabel16)
+												.addContainerGap(487,
+														Short.MAX_VALUE)))
+				.addGroup(
+						layout.createParallelGroup(
+								javax.swing.GroupLayout.Alignment.LEADING)
+								.addGroup(
+										layout.createSequentialGroup()
+												.addGap(181, 181, 181)
+												.addComponent(jLabel17)
+												.addContainerGap(477,
+														Short.MAX_VALUE)))
+				.addGroup(
+						layout.createParallelGroup(
+								javax.swing.GroupLayout.Alignment.LEADING)
+								.addGroup(
+										layout.createSequentialGroup()
+												.addGap(191, 191, 191)
+												.addComponent(jLabel18)
+												.addContainerGap(467,
+														Short.MAX_VALUE)))
+				.addGroup(
+						layout.createParallelGroup(
+								javax.swing.GroupLayout.Alignment.LEADING)
+								.addGroup(
+										layout.createSequentialGroup()
+												.addGap(201, 201, 201)
+												.addComponent(jLabel19)
+												.addContainerGap(457,
+														Short.MAX_VALUE)))
+				.addGroup(
+						layout.createParallelGroup(
+								javax.swing.GroupLayout.Alignment.LEADING)
+								.addGroup(
+										layout.createSequentialGroup()
+												.addGap(211, 211, 211)
+												.addComponent(jLabel20)
+												.addContainerGap(447,
+														Short.MAX_VALUE)))
+				.addGroup(
+						layout.createParallelGroup(
+								javax.swing.GroupLayout.Alignment.LEADING)
+								.addGroup(
+										layout.createSequentialGroup()
+												.addGap(221, 221, 221)
+												.addComponent(jLabel21)
+												.addContainerGap(437,
+														Short.MAX_VALUE)))
+				.addGroup(
+						layout.createParallelGroup(
+								javax.swing.GroupLayout.Alignment.LEADING)
+								.addGroup(
+										layout.createSequentialGroup()
+												.addGap(231, 231, 231)
+												.addComponent(jLabel22)
+												.addContainerGap(427,
+														Short.MAX_VALUE)))
+				.addGroup(
+						layout.createParallelGroup(
+								javax.swing.GroupLayout.Alignment.LEADING)
+								.addGroup(
+										layout.createSequentialGroup()
+												.addGap(241, 241, 241)
+												.addComponent(jLabel23)
+												.addContainerGap(417,
+														Short.MAX_VALUE)))
+				.addGroup(
+						layout.createParallelGroup(
+								javax.swing.GroupLayout.Alignment.LEADING)
+								.addGroup(
+										layout.createSequentialGroup()
+												.addGap(251, 251, 251)
+												.addComponent(jLabel24)
+												.addContainerGap(407,
+														Short.MAX_VALUE)))
+				.addGroup(
+						layout.createParallelGroup(
+								javax.swing.GroupLayout.Alignment.LEADING)
+								.addGroup(
+										layout.createSequentialGroup()
+												.addGap(261, 261, 261)
+												.addComponent(jLabel25)
+												.addContainerGap(397,
+														Short.MAX_VALUE)))
+				.addGroup(
+						layout.createParallelGroup(
+								javax.swing.GroupLayout.Alignment.LEADING)
+								.addGroup(
+										layout.createSequentialGroup()
+												.addGap(271, 271, 271)
+												.addComponent(jLabel26)
+												.addContainerGap(387,
+														Short.MAX_VALUE)))
+				.addGroup(
+						layout.createParallelGroup(
+								javax.swing.GroupLayout.Alignment.LEADING)
+								.addGroup(
+										layout.createSequentialGroup()
+												.addGap(281, 281, 281)
+												.addComponent(jLabel27)
+												.addContainerGap(377,
+														Short.MAX_VALUE)))
+				.addGroup(
+						layout.createParallelGroup(
+								javax.swing.GroupLayout.Alignment.LEADING)
+								.addGroup(
+										layout.createSequentialGroup()
+												.addGap(291, 291, 291)
+												.addComponent(jLabel28)
+												.addContainerGap(367,
+														Short.MAX_VALUE)))
+				.addGroup(
+						layout.createParallelGroup(
+								javax.swing.GroupLayout.Alignment.LEADING)
+								.addGroup(
+										layout.createSequentialGroup()
+												.addGap(301, 301, 301)
+												.addComponent(jLabel29)
+												.addContainerGap(357,
+														Short.MAX_VALUE)))
+				.addGroup(
+						layout.createParallelGroup(
+								javax.swing.GroupLayout.Alignment.LEADING)
+								.addGroup(
+										layout.createSequentialGroup()
+												.addGap(311, 311, 311)
+												.addComponent(jLabel30)
+												.addContainerGap(347,
+														Short.MAX_VALUE))));
+		layout.setVerticalGroup(layout
+				.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+				.addGroup(
+						layout.createSequentialGroup().addGap(24, 24, 24)
+								.addComponent(jLabel1)
+								.addContainerGap(361, Short.MAX_VALUE))
+				.addGroup(
+						layout.createParallelGroup(
+								javax.swing.GroupLayout.Alignment.LEADING)
+								.addGroup(
+										layout.createSequentialGroup()
+												.addGap(34, 34, 34)
+												.addComponent(jLabel2)
+												.addContainerGap(351,
+														Short.MAX_VALUE)))
+				.addGroup(
+						layout.createParallelGroup(
+								javax.swing.GroupLayout.Alignment.LEADING)
+								.addGroup(
+										layout.createSequentialGroup()
+												.addGap(44, 44, 44)
+												.addComponent(jLabel3)
+												.addContainerGap(341,
+														Short.MAX_VALUE)))
+				.addGroup(
+						layout.createParallelGroup(
+								javax.swing.GroupLayout.Alignment.LEADING)
+								.addGroup(
+										layout.createSequentialGroup()
+												.addGap(54, 54, 54)
+												.addComponent(jLabel4)
+												.addContainerGap(331,
+														Short.MAX_VALUE)))
+				.addGroup(
+						layout.createParallelGroup(
+								javax.swing.GroupLayout.Alignment.LEADING)
+								.addGroup(
+										layout.createSequentialGroup()
+												.addGap(64, 64, 64)
+												.addComponent(jLabel5)
+												.addContainerGap(321,
+														Short.MAX_VALUE)))
+				.addGroup(
+						layout.createParallelGroup(
+								javax.swing.GroupLayout.Alignment.LEADING)
+								.addGroup(
+										layout.createSequentialGroup()
+												.addGap(74, 74, 74)
+												.addComponent(jLabel6)
+												.addContainerGap(311,
+														Short.MAX_VALUE)))
+				.addGroup(
+						layout.createParallelGroup(
+								javax.swing.GroupLayout.Alignment.LEADING)
+								.addGroup(
+										layout.createSequentialGroup()
+												.addGap(84, 84, 84)
+												.addComponent(jLabel7)
+												.addContainerGap(301,
+														Short.MAX_VALUE)))
+				.addGroup(
+						layout.createParallelGroup(
+								javax.swing.GroupLayout.Alignment.LEADING)
+								.addGroup(
+										layout.createSequentialGroup()
+												.addGap(94, 94, 94)
+												.addComponent(jLabel8)
+												.addContainerGap(291,
+														Short.MAX_VALUE)))
+				.addGroup(
+						layout.createParallelGroup(
+								javax.swing.GroupLayout.Alignment.LEADING)
+								.addGroup(
+										layout.createSequentialGroup()
+												.addGap(104, 104, 104)
+												.addComponent(jLabel9)
+												.addContainerGap(281,
+														Short.MAX_VALUE)))
+				.addGroup(
+						layout.createParallelGroup(
+								javax.swing.GroupLayout.Alignment.LEADING)
+								.addGroup(
+										layout.createSequentialGroup()
+												.addGap(114, 114, 114)
+												.addComponent(jLabel10)
+												.addContainerGap(271,
+														Short.MAX_VALUE)))
+				.addGroup(
+						layout.createParallelGroup(
+								javax.swing.GroupLayout.Alignment.LEADING)
+								.addGroup(
+										layout.createSequentialGroup()
+												.addGap(124, 124, 124)
+												.addComponent(jLabel11)
+												.addContainerGap(261,
+														Short.MAX_VALUE)))
+				.addGroup(
+						layout.createParallelGroup(
+								javax.swing.GroupLayout.Alignment.LEADING)
+								.addGroup(
+										layout.createSequentialGroup()
+												.addGap(134, 134, 134)
+												.addComponent(jLabel12)
+												.addContainerGap(251,
+														Short.MAX_VALUE)))
+				.addGroup(
+						layout.createParallelGroup(
+								javax.swing.GroupLayout.Alignment.LEADING)
+								.addGroup(
+										layout.createSequentialGroup()
+												.addGap(144, 144, 144)
+												.addComponent(jLabel13)
+												.addContainerGap(241,
+														Short.MAX_VALUE)))
+				.addGroup(
+						layout.createParallelGroup(
+								javax.swing.GroupLayout.Alignment.LEADING)
+								.addGroup(
+										layout.createSequentialGroup()
+												.addGap(154, 154, 154)
+												.addComponent(jLabel14)
+												.addContainerGap(231,
+														Short.MAX_VALUE)))
+				.addGroup(
+						layout.createParallelGroup(
+								javax.swing.GroupLayout.Alignment.LEADING)
+								.addGroup(
+										layout.createSequentialGroup()
+												.addGap(164, 164, 164)
+												.addComponent(jLabel15)
+												.addContainerGap(221,
+														Short.MAX_VALUE)))
+				.addGroup(
+						layout.createParallelGroup(
+								javax.swing.GroupLayout.Alignment.LEADING)
+								.addGroup(
+										layout.createSequentialGroup()
+												.addGap(174, 174, 174)
+												.addComponent(jLabel16)
+												.addContainerGap(211,
+														Short.MAX_VALUE)))
+				.addGroup(
+						layout.createParallelGroup(
+								javax.swing.GroupLayout.Alignment.LEADING)
+								.addGroup(
+										layout.createSequentialGroup()
+												.addGap(184, 184, 184)
+												.addComponent(jLabel17)
+												.addContainerGap(201,
+														Short.MAX_VALUE)))
+				.addGroup(
+						layout.createParallelGroup(
+								javax.swing.GroupLayout.Alignment.LEADING)
+								.addGroup(
+										javax.swing.GroupLayout.Alignment.TRAILING,
+										layout.createSequentialGroup()
+												.addContainerGap(194,
+														Short.MAX_VALUE)
+												.addComponent(jLabel18)
+												.addGap(191, 191, 191)))
+				.addGroup(
+						layout.createParallelGroup(
+								javax.swing.GroupLayout.Alignment.LEADING)
+								.addGroup(
+										javax.swing.GroupLayout.Alignment.TRAILING,
+										layout.createSequentialGroup()
+												.addContainerGap(204,
+														Short.MAX_VALUE)
+												.addComponent(jLabel19)
+												.addGap(181, 181, 181)))
+				.addGroup(
+						layout.createParallelGroup(
+								javax.swing.GroupLayout.Alignment.LEADING)
+								.addGroup(
+										javax.swing.GroupLayout.Alignment.TRAILING,
+										layout.createSequentialGroup()
+												.addContainerGap(214,
+														Short.MAX_VALUE)
+												.addComponent(jLabel20)
+												.addGap(171, 171, 171)))
+				.addGroup(
+						layout.createParallelGroup(
+								javax.swing.GroupLayout.Alignment.LEADING)
+								.addGroup(
+										javax.swing.GroupLayout.Alignment.TRAILING,
+										layout.createSequentialGroup()
+												.addContainerGap(224,
+														Short.MAX_VALUE)
+												.addComponent(jLabel21)
+												.addGap(161, 161, 161)))
+				.addGroup(
+						layout.createParallelGroup(
+								javax.swing.GroupLayout.Alignment.LEADING)
+								.addGroup(
+										javax.swing.GroupLayout.Alignment.TRAILING,
+										layout.createSequentialGroup()
+												.addContainerGap(234,
+														Short.MAX_VALUE)
+												.addComponent(jLabel22)
+												.addGap(151, 151, 151)))
+				.addGroup(
+						layout.createParallelGroup(
+								javax.swing.GroupLayout.Alignment.LEADING)
+								.addGroup(
+										javax.swing.GroupLayout.Alignment.TRAILING,
+										layout.createSequentialGroup()
+												.addContainerGap(244,
+														Short.MAX_VALUE)
+												.addComponent(jLabel23)
+												.addGap(141, 141, 141)))
+				.addGroup(
+						layout.createParallelGroup(
+								javax.swing.GroupLayout.Alignment.LEADING)
+								.addGroup(
+										javax.swing.GroupLayout.Alignment.TRAILING,
+										layout.createSequentialGroup()
+												.addContainerGap(254,
+														Short.MAX_VALUE)
+												.addComponent(jLabel24)
+												.addGap(131, 131, 131)))
+				.addGroup(
+						layout.createParallelGroup(
+								javax.swing.GroupLayout.Alignment.LEADING)
+								.addGroup(
+										javax.swing.GroupLayout.Alignment.TRAILING,
+										layout.createSequentialGroup()
+												.addContainerGap(264,
+														Short.MAX_VALUE)
+												.addComponent(jLabel25)
+												.addGap(121, 121, 121)))
+				.addGroup(
+						layout.createParallelGroup(
+								javax.swing.GroupLayout.Alignment.LEADING)
+								.addGroup(
+										javax.swing.GroupLayout.Alignment.TRAILING,
+										layout.createSequentialGroup()
+												.addContainerGap(274,
+														Short.MAX_VALUE)
+												.addComponent(jLabel26)
+												.addGap(111, 111, 111)))
+				.addGroup(
+						layout.createParallelGroup(
+								javax.swing.GroupLayout.Alignment.LEADING)
+								.addGroup(
+										javax.swing.GroupLayout.Alignment.TRAILING,
+										layout.createSequentialGroup()
+												.addContainerGap(284,
+														Short.MAX_VALUE)
+												.addComponent(jLabel27)
+												.addGap(101, 101, 101)))
+				.addGroup(
+						layout.createParallelGroup(
+								javax.swing.GroupLayout.Alignment.LEADING)
+								.addGroup(
+										javax.swing.GroupLayout.Alignment.TRAILING,
+										layout.createSequentialGroup()
+												.addContainerGap(294,
+														Short.MAX_VALUE)
+												.addComponent(jLabel28)
+												.addGap(91, 91, 91)))
+				.addGroup(
+						layout.createParallelGroup(
+								javax.swing.GroupLayout.Alignment.LEADING)
+								.addGroup(
+										javax.swing.GroupLayout.Alignment.TRAILING,
+										layout.createSequentialGroup()
+												.addContainerGap(304,
+														Short.MAX_VALUE)
+												.addComponent(jLabel29)
+												.addGap(81, 81, 81)))
+				.addGroup(
+						layout.createParallelGroup(
+								javax.swing.GroupLayout.Alignment.LEADING)
+								.addGroup(
+										javax.swing.GroupLayout.Alignment.TRAILING,
+										layout.createSequentialGroup()
+												.addContainerGap(314,
+														Short.MAX_VALUE)
+												.addComponent(jLabel30)
+												.addGap(71, 71, 71))));
 	}// </editor-fold>
 	//GEN-END:initComponents
 
 	//GEN-BEGIN:variables
 	// Variables declaration - do not modify
 	private javax.swing.JLabel jLabel1;
+	private javax.swing.JLabel jLabel10;
+	private javax.swing.JLabel jLabel11;
+	private javax.swing.JLabel jLabel12;
+	private javax.swing.JLabel jLabel13;
+	private javax.swing.JLabel jLabel14;
+	private javax.swing.JLabel jLabel15;
+	private javax.swing.JLabel jLabel16;
+	private javax.swing.JLabel jLabel17;
+	private javax.swing.JLabel jLabel18;
+	private javax.swing.JLabel jLabel19;
+	private javax.swing.JLabel jLabel2;
+	private javax.swing.JLabel jLabel20;
+	private javax.swing.JLabel jLabel21;
+	private javax.swing.JLabel jLabel22;
+	private javax.swing.JLabel jLabel23;
+	private javax.swing.JLabel jLabel24;
+	private javax.swing.JLabel jLabel25;
+	private javax.swing.JLabel jLabel26;
+	private javax.swing.JLabel jLabel27;
+	private javax.swing.JLabel jLabel28;
+	private javax.swing.JLabel jLabel29;
+	private javax.swing.JLabel jLabel3;
+	private javax.swing.JLabel jLabel30;
+	private javax.swing.JLabel jLabel4;
+	private javax.swing.JLabel jLabel5;
+	private javax.swing.JLabel jLabel6;
+	private javax.swing.JLabel jLabel7;
+	private javax.swing.JLabel jLabel8;
+	private javax.swing.JLabel jLabel9;
 	// End of variables declaration//GEN-END:variables
 
 }

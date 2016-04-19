@@ -10,6 +10,10 @@ import helper.CwqHelper;
 
 import java.awt.event.ItemEvent;
 
+import javax.crypto.spec.IvParameterSpec;
+
+import utils.FrameUtil;
+
 import data.Constant;
 
 /**
@@ -22,6 +26,7 @@ public class MainFrame extends javax.swing.JFrame {
 	public MainFrame() {
 		initComponents();
 		initType();
+		FrameUtil.initWindows(this);
 	}
 
 	/** This method is called from within the constructor to
@@ -34,14 +39,22 @@ public class MainFrame extends javax.swing.JFrame {
 	private void initComponents() {
 
 		jp_main = new javax.swing.JPanel();
+		jPanel1 = new javax.swing.JPanel();
 		cb_type = new javax.swing.JComboBox();
 		et_page = new javax.swing.JTextField();
 		btn_start = new javax.swing.JButton();
 		jMenuBar1 = new javax.swing.JMenuBar();
 		jMenu1 = new javax.swing.JMenu();
-		jMenuItem1 = new javax.swing.JMenuItem();
+		item_cwq = new javax.swing.JMenuItem();
+		item_wx = new javax.swing.JMenuItem();
 
 		setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+		setMinimumSize(new java.awt.Dimension(500, 300));
+		setResizable(false);
+
+		jp_main.setMaximumSize(new java.awt.Dimension(500, 300));
+		jp_main.setMinimumSize(new java.awt.Dimension(500, 300));
+		jp_main.setLayout(new java.awt.GridLayout());
 
 		cb_type.setModel(new javax.swing.DefaultComboBoxModel(new String[] {
 				"Item 1", "Item 2", "Item 3", "Item 4" }));
@@ -52,11 +65,6 @@ public class MainFrame extends javax.swing.JFrame {
 		});
 
 		et_page.setColumns(5);
-		et_page.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				et_pageActionPerformed(evt);
-			}
-		});
 
 		btn_start.setText("\u5f00\u59cb");
 		btn_start.addActionListener(new java.awt.event.ActionListener() {
@@ -65,72 +73,85 @@ public class MainFrame extends javax.swing.JFrame {
 			}
 		});
 
-		javax.swing.GroupLayout jp_mainLayout = new javax.swing.GroupLayout(
-				jp_main);
-		jp_main.setLayout(jp_mainLayout);
-		jp_mainLayout
-				.setHorizontalGroup(jp_mainLayout
+		javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(
+				jPanel1);
+		jPanel1.setLayout(jPanel1Layout);
+		jPanel1Layout.setHorizontalGroup(jPanel1Layout.createParallelGroup(
+				javax.swing.GroupLayout.Alignment.LEADING).addGroup(
+				jPanel1Layout
+						.createSequentialGroup()
+						.addContainerGap(122, Short.MAX_VALUE)
+						.addComponent(cb_type,
+								javax.swing.GroupLayout.PREFERRED_SIZE,
+								javax.swing.GroupLayout.DEFAULT_SIZE,
+								javax.swing.GroupLayout.PREFERRED_SIZE)
+						.addGap(66, 66, 66)
+						.addComponent(et_page,
+								javax.swing.GroupLayout.PREFERRED_SIZE,
+								javax.swing.GroupLayout.DEFAULT_SIZE,
+								javax.swing.GroupLayout.PREFERRED_SIZE)
+						.addGap(69, 69, 69).addComponent(btn_start)
+						.addGap(88, 88, 88)));
+		jPanel1Layout
+				.setVerticalGroup(jPanel1Layout
 						.createParallelGroup(
 								javax.swing.GroupLayout.Alignment.LEADING)
 						.addGroup(
-								jp_mainLayout
+								jPanel1Layout
 										.createSequentialGroup()
-										.addGap(23, 23, 23)
-										.addComponent(
-												cb_type,
-												javax.swing.GroupLayout.PREFERRED_SIZE,
-												javax.swing.GroupLayout.DEFAULT_SIZE,
-												javax.swing.GroupLayout.PREFERRED_SIZE)
-										.addGap(101, 101, 101)
-										.addComponent(
-												et_page,
-												javax.swing.GroupLayout.PREFERRED_SIZE,
-												javax.swing.GroupLayout.DEFAULT_SIZE,
-												javax.swing.GroupLayout.PREFERRED_SIZE)
-										.addPreferredGap(
-												javax.swing.LayoutStyle.ComponentPlacement.RELATED,
-												106, Short.MAX_VALUE)
-										.addComponent(btn_start)
-										.addGap(28, 28, 28)));
-		jp_mainLayout
-				.setVerticalGroup(jp_mainLayout
-						.createParallelGroup(
-								javax.swing.GroupLayout.Alignment.LEADING)
-						.addGroup(
-								jp_mainLayout
-										.createSequentialGroup()
-										.addContainerGap()
 										.addGroup(
-												jp_mainLayout
+												jPanel1Layout
 														.createParallelGroup(
-																javax.swing.GroupLayout.Alignment.BASELINE)
-														.addComponent(
-																cb_type,
-																javax.swing.GroupLayout.PREFERRED_SIZE,
-																javax.swing.GroupLayout.DEFAULT_SIZE,
-																javax.swing.GroupLayout.PREFERRED_SIZE)
-														.addComponent(btn_start)
-														.addComponent(
-																et_page,
-																javax.swing.GroupLayout.PREFERRED_SIZE,
-																javax.swing.GroupLayout.DEFAULT_SIZE,
-																javax.swing.GroupLayout.PREFERRED_SIZE))
-										.addContainerGap(240, Short.MAX_VALUE)));
+																javax.swing.GroupLayout.Alignment.LEADING)
+														.addGroup(
+																jPanel1Layout
+																		.createSequentialGroup()
+																		.addGap(64,
+																				64,
+																				64)
+																		.addGroup(
+																				jPanel1Layout
+																						.createParallelGroup(
+																								javax.swing.GroupLayout.Alignment.BASELINE)
+																						.addComponent(
+																								et_page,
+																								javax.swing.GroupLayout.PREFERRED_SIZE,
+																								javax.swing.GroupLayout.DEFAULT_SIZE,
+																								javax.swing.GroupLayout.PREFERRED_SIZE)
+																						.addComponent(
+																								btn_start)))
+														.addGroup(
+																jPanel1Layout
+																		.createSequentialGroup()
+																		.addGap(46,
+																				46,
+																				46)
+																		.addComponent(
+																				cb_type,
+																				javax.swing.GroupLayout.PREFERRED_SIZE,
+																				javax.swing.GroupLayout.DEFAULT_SIZE,
+																				javax.swing.GroupLayout.PREFERRED_SIZE)))
+										.addContainerGap(313, Short.MAX_VALUE)));
 
-		jMenu1.setText("\u6570\u636e\u6e90");
+		jp_main.add(jPanel1);
 
-		jMenuItem1.setText("\u57ce\u5916\u5708");
-		jMenuItem1.addMouseListener(new java.awt.event.MouseAdapter() {
-			public void mouseClicked(java.awt.event.MouseEvent evt) {
-				jMenuItem1MouseClicked(evt);
-			}
-		});
-		jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+		jMenu1.setText("\u529f\u80fd");
+
+		item_cwq.setText("\u57ce\u5916\u5708");
+		item_cwq.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				jMenuItem1ActionPerformed(evt);
+				item_cwqActionPerformed(evt);
 			}
 		});
-		jMenu1.add(jMenuItem1);
+		jMenu1.add(item_cwq);
+
+		item_wx.setText("\u5fae\u4fe1");
+		item_wx.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				item_wxActionPerformed(evt);
+			}
+		});
+		jMenu1.add(item_wx);
 
 		jMenuBar1.add(jMenu1);
 
@@ -141,16 +162,22 @@ public class MainFrame extends javax.swing.JFrame {
 		getContentPane().setLayout(layout);
 		layout.setHorizontalGroup(layout.createParallelGroup(
 				javax.swing.GroupLayout.Alignment.LEADING).addComponent(
-				jp_main, javax.swing.GroupLayout.DEFAULT_SIZE,
-				javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE));
+				jp_main, javax.swing.GroupLayout.PREFERRED_SIZE,
+				javax.swing.GroupLayout.DEFAULT_SIZE,
+				javax.swing.GroupLayout.PREFERRED_SIZE));
 		layout.setVerticalGroup(layout.createParallelGroup(
 				javax.swing.GroupLayout.Alignment.LEADING).addComponent(
-				jp_main, javax.swing.GroupLayout.DEFAULT_SIZE,
-				javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE));
+				jp_main, javax.swing.GroupLayout.PREFERRED_SIZE,
+				javax.swing.GroupLayout.DEFAULT_SIZE,
+				javax.swing.GroupLayout.PREFERRED_SIZE));
 
 		pack();
 	}// </editor-fold>
 	//GEN-END:initComponents
+
+	private void item_wxActionPerformed(java.awt.event.ActionEvent evt) {
+
+	}
 
 	private void btn_startActionPerformed(java.awt.event.ActionEvent evt) {
 		start();
@@ -161,25 +188,18 @@ public class MainFrame extends javax.swing.JFrame {
 			int index = cb_type.getSelectedIndex();
 			type_id = Constant.LIST_TYPE_ID[index] + "";
 			currentType = cb_type.getSelectedIndex() + 1 + "";
-			System.out.println("type = " + currentType + ", type_id = " + type_id);
+			System.out.println("type = " + currentType + ", type_id = "
+					+ type_id);
 		}
 	}
 
-	private void et_pageActionPerformed(java.awt.event.ActionEvent evt) {
-		// TODO add your handling code here:
-	}
-
-	private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {
-
+	void item_cwqActionPerformed(java.awt.event.ActionEvent evt) {
 		CwqJpanel jp_cwq = new CwqJpanel();
-		add(jp_cwq);
-		jp_main.setVisible(false);
 		jp_cwq.setVisible(true);
-
-	}
-
-	private void jMenuItem1MouseClicked(java.awt.event.MouseEvent evt) {
-
+		jp_main.removeAll();
+		jp_main.add(jp_cwq);
+		this.invalidate();
+		this.repaint();
 	}
 
 	private void start() {
@@ -188,7 +208,7 @@ public class MainFrame extends javax.swing.JFrame {
 		type_id = Constant.LIST_TYPE_ID[cb_type.getSelectedIndex()] + "";
 		helper.setTypeId(type_id);
 		helper.setPage(Integer.valueOf(et_page.getText()));
-		if(helper.login()) {
+		if (helper.login()) {
 			helper.getWxData();
 		}
 	}
@@ -215,9 +235,11 @@ public class MainFrame extends javax.swing.JFrame {
 	private javax.swing.JButton btn_start;
 	private javax.swing.JComboBox cb_type;
 	private javax.swing.JTextField et_page;
+	private javax.swing.JMenuItem item_cwq;
+	private javax.swing.JMenuItem item_wx;
 	private javax.swing.JMenu jMenu1;
 	private javax.swing.JMenuBar jMenuBar1;
-	private javax.swing.JMenuItem jMenuItem1;
+	private javax.swing.JPanel jPanel1;
 	private javax.swing.JPanel jp_main;
 	// End of variables declaration//GEN-END:variables
 

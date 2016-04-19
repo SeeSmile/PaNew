@@ -2,6 +2,8 @@ package data;
 
 public class Constant {
 	
+
+	
 	/**
 	 * 城外圈的数据分类列表
 	 */

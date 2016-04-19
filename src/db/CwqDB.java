@@ -11,6 +11,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 
 import data.CwqWX;
@@ -96,6 +97,14 @@ public class CwqDB extends BaseDB{
 		state.execute();
 	}
 	
+	private static void update(String id, String url) throws SQLException {
+		String sql = "update " + TABLE_PRICE + " set " + CA_ICON + "=?where ca_id=?";
+		PreparedStatement state = getPrepared(sql);
+		state.setString(1, "/Uploads/20160418/" + url);
+		state.setString(2, id);
+		state.execute();
+	}
+	
 	private static String getFans(String text) {
 		String price = text.replaceFirst("Íò", "0000");
 		if(Integer.valueOf(price) > 1 * 10000 * 10000) {
@@ -105,7 +114,7 @@ public class CwqDB extends BaseDB{
 	}
 	
 	public static void saveFile() throws SQLException{
-		String sql = "select ca_icon from " + TABLE_PRICE;
+		String sql = "select ca_icon, ca_id from " + TABLE_PRICE;
 		final PreparedStatement state = getPrepared(sql);
 		
 	
@@ -115,27 +124,49 @@ public class CwqDB extends BaseDB{
 			@Override
 			public void run() {
 				int i = 0;
-				String path = "c:\\pics\\";
+				String path = "d:\\pics\\";
 				ResultSet result;
-				try {
-					result = state.executeQuery();
-					while(result.next()) {
-						System.out.println("current:" + i);
-						String url = result.getString(1);
-						System.out.println("url:" + url);
-						int p = url.lastIndexOf("/");
-						String name = url.substring(p + 1, url.length());
-						File file = new File(path + name);
-						if(!file.exists()) {
-							file.createNewFile();
-							downloadFile(url, name, path);
+				
+					
+					List<String> urls = new ArrayList<String>();
+					try {
+						result = state.executeQuery();
+						while(result.next()) {
+							
+							System.out.println("current:" + i);
+							String url = result.getString(1);
+							int p = url.lastIndexOf("/");
+							String name = url.substring(p + 1, url.length());
+							if(name.indexOf("?") > -1) {
+								System.out.println("url:" + url);
+								int p2 = name.indexOf("?");
+								name = name.substring(p2 + 1, name.length());
+							}
+							File file = new File(path + name);
+							if(!file.exists()) {
+								try {
+									file.createNewFile();
+									downloadFile(url, name, path);
+									Thread.sleep(2 * 100);
+									
+								} catch (Exception e) {
+									urls.add(url);
+									System.out.println("url:" + url);
+								}
+							} else {
+								update(result.getString(2), name);
+							}
 							i++;
-							Thread.sleep(2 * 100);
-						} 
+						}
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
 					}
-				} catch (Exception e1) {
-					e1.printStackTrace();
-				}
+					for(String t : urls) {
+						System.out.println(t);
+					}
+					System.out.println(urls.size());
+				
 				
 			}
 		}).start();

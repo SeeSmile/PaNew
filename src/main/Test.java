@@ -18,12 +18,10 @@ public class Test {
 	public static void main(String[] args) {
 
 		try {
-			WXhelper.getSearchList("headline_today");
+			System.out.println(WXhelper.getSearchList("cdhqls"));
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

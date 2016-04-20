@@ -7,6 +7,7 @@ public class SoGouWX {
 	public static final String TYPE_TOP = "1";
 	public static final String TYPE_SECOND = "2";
 	public static final String TYPE_THREE = "3";
+	public static final String TYPE_OTHER = "4";
 	
 	private String read_num;
 	private String like_num;

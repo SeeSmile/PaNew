@@ -18,11 +18,11 @@ public class Test {
 	public static void main(String[] args) {
 
 		try {
-			System.out.println(WXhelper.getSearchList("cdhqls"));
+			System.out.println(WXhelper.getSearchList("adwlfhd"));
 		} catch (IOException e) {
-			e.printStackTrace();
+			System.out.println("网络连接超时!");
 		} catch (Exception e) {
-			e.printStackTrace();
+			System.out.println("程序内部报错...");
 		}
 	}
 

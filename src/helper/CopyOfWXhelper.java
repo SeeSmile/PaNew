@@ -19,7 +19,7 @@ import data.WXEntity;
 import data.WxNews;
 import data.WxNews.AppMsgExtInfoEntity.MultiAppMsgItemListEntity;
 import utils.WebUtil;
-public class WXhelper {
+public class CopyOfWXhelper {
 	
 	private static final String KEY_INTRODUCE = "功能介绍";
 	private static final String KEY_ATT = "认证";
@@ -34,7 +34,8 @@ public class WXhelper {
 	public static JSONObject getSearchList(String account) throws Exception {
 		WXEntity entity = getUrlbyAccount(account);
 		JSONObject json = new JSONObject(entity.toString());
-		JSONArray array =  getNewsByUrl(entity.getUrl());
+//		JSONArray array =  getNewsByUrl(entity.getUrl());
+		JSONArray array =  getNewsByUrl2(entity.getUrl());
 		json.put("news", array);
 		return json;
 	}
@@ -52,6 +53,79 @@ public class WXhelper {
 		return text;
 	}
 	
+	private static List<SoGouWX> getSouWX(String text) throws JsonSyntaxException, Exception {
+		String s = new String(text);
+		SoGouWX wx = getSingleSouWx(text);
+		List<SoGouWX> list = new ArrayList<SoGouWX>();
+		if(wx != null) {
+			
+			String time = wx.getTime();
+			wx.setType(SoGouWX.TYPE_TOP);
+			list.add(wx);
+			if(text.indexOf("multi_app_msg_item_list") > -1) {
+				String text_multi = s.split("multi_app_msg_item_list")[1];
+				text_multi = text_multi.substring(text_multi.indexOf("["), text_multi.lastIndexOf("]"));
+				String[] strs = text_multi.split("}");
+				boolean isfirst = true;
+				for(String str : strs) {
+					SoGouWX mWx = getSingleSouWx(str);
+					if(mWx != null) {
+						mWx.setTime(time);
+						if(isfirst) {
+							mWx.setType(SoGouWX.TYPE_SECOND);
+						} else {
+							mWx.setType(SoGouWX.TYPE_THREE);
+						}
+						list.add(mWx);
+						isfirst = false;
+					}
+				}
+			}
+			return list;
+		}
+		return null;
+	}
+	
+	private static SoGouWX getSingleSouWx(String text) throws Exception {
+		String s = new String(text);
+		//如果是头条资讯
+		if(s.indexOf("app_msg_ext_info") > -1) {
+			int p_time = s.indexOf("\"datetime\":");
+			int p_title = s.indexOf("\"title\":");
+			int p_subtitle = s.indexOf(",\"digest\":");
+			String time = s.substring(p_time + "\"datetime\":".length(), s.indexOf(",", p_time));
+			String title = s.substring(p_title + "\"title\":".length(), p_subtitle);
+			s = s.substring(p_subtitle);
+			p_subtitle = s.indexOf(",\"digest\":");
+			int p_end = s.indexOf(",\"content\":");
+			String subtitle = s.substring(p_subtitle + ",\"digest\":".length(), p_end);
+			//拼接完整的文章链接
+			String url_s = replaceUrl(text);
+			SoGouWX wx = new Gson().fromJson(WebUtil.sendGET(url_s), SoGouWX.class);
+			wx.setTitle(title);
+			wx.setTime(time);
+			wx.setSubtitle(subtitle);
+			return wx;
+		} else {
+			int p_title = s.indexOf("\"title\":");
+			if(p_title > -1)  {
+				int p_subtitle = s.indexOf(",\"digest\":");
+				String title = s.substring(p_title + "\"title\":".length(), p_subtitle);
+				s = s.substring(p_subtitle);
+				p_subtitle = s.indexOf(",\"digest\":");
+				int p_end = s.indexOf(",\"content\":");
+				String subtitle = s.substring(p_subtitle + ",\"digest\":".length(), p_end);
+				//拼接完整的文章链接
+				String url_s = replaceUrl(text);
+				SoGouWX wx = new Gson().fromJson(WebUtil.sendGET(url_s), SoGouWX.class);
+				wx.setTitle(title);
+				wx.setSubtitle(subtitle);
+				return wx;
+			}
+		}
+		return null;
+	}
+	
 	private static WXEntity getUrlbyAccount(String account) throws IOException {
 		//调用搜狗搜索相应的微信号
 		String mainurl = URL_SEARCH + PARAM_SEARCH + "&query=" + account;
@@ -63,17 +137,6 @@ public class WXhelper {
 		Elements eles = doc.getElementsByClass("weixin-public");
 		Element ele = eles.get(0);
 		WXEntity entity = new WXEntity();
-		boolean first = true;
-		//获取二维码和头像
-		for(Element e : ele.getElementsByClass("pos-ico").select("img[src]")) {
-			if(first) {
-				entity.setAvatar(e.attr("src"));
-				first = false;
-			} else {
-				entity.setQrcode(e.attr("src"));
-			}
-		}
-		
 		String url = ele.select("div[href]").get(0).attr("href");
 		ele = ele.getElementsByClass("txt-box").get(0);
 		String name = ele.getElementsByTag("h3").text();
@@ -98,7 +161,7 @@ public class WXhelper {
 		return entity;
 	}
 	
-	private static JSONArray getNewsByUrl(String url) throws Exception {
+	private static JSONArray getNewsByUrl(String url) throws JsonSyntaxException, Exception {
 		//获取第一条微信公众号的主页
 		Document doc2 = Jsoup.connect(url)
 				.userAgent("Mozilla")
@@ -116,7 +179,38 @@ public class WXhelper {
 		int p_s = text_json.indexOf("{");
 		int p_end = text_json.lastIndexOf("}");
 		text_json = text_json.substring(p_s, p_end + 1);
-		System.out.println(text_json);
+//		JSONObject json = new JSONObject(text_json);
+		String[] ss = text_json.split("comm_msg_info");
+		JSONArray array = new JSONArray();
+		for(String s : ss) {
+			List<SoGouWX> infos = getSouWX(s);
+			if(infos != null) {
+				for(SoGouWX info : infos) {
+					array.put(new JSONObject(info.toString()));
+				}
+			}
+		}
+		return array;
+	}
+	
+	private static JSONArray getNewsByUrl2(String url) throws Exception {
+		//获取第一条微信公众号的主页
+		Document doc2 = Jsoup.connect(url)
+				.userAgent("Mozilla")
+				.cookie("auth", "token")
+				.timeout(5000)
+				.get();
+		String result = doc2.toString();
+		//截取字符串，提取文章列表的链接
+		int p = result.indexOf("msgList");
+		//数据清洗，去除多余的字符串
+		String text_json = result.substring(p)
+				.replaceAll("&quot;", "\"")
+				.replaceAll("amp;", "")
+				.replaceAll("&nbsp;", " ");
+		int p_s = text_json.indexOf("{");
+		int p_end = text_json.lastIndexOf("}");
+		text_json = text_json.substring(p_s, p_end + 1);
 		JSONObject json = new JSONObject(text_json);
 		JSONArray array = json.optJSONArray("list");
 		if(array != null) {
@@ -145,10 +239,8 @@ public class WXhelper {
 						mwx.setSubtitle(entity.getDigest());
 						if(j == 0) {
 							mwx.setType(SoGouWX.TYPE_SECOND);
-						} else if(j == 1){
-							mwx.setType(SoGouWX.TYPE_THREE);
 						} else {
-							mwx.setType(SoGouWX.TYPE_OTHER);
+							mwx.setType(SoGouWX.TYPE_THREE);
 						}
 						dataArray.put(new JSONObject(mwx.toString()));
 					}

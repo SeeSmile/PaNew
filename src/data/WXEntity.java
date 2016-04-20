@@ -9,6 +9,9 @@ public class WXEntity {
 	public static final String ATT_YES = "1";
 	public static final String ATT_NO = "2";
 	
+	private String avatar;
+	
+	private String qrcode;
 	/**
 	 * ÍøÒ³Ö÷Ò³µØÖ·
 	 */
@@ -38,6 +41,23 @@ public class WXEntity {
 		this.is_att = ATT_NO;
 	}
 	
+	
+	public String getAvatar() {
+		return avatar;
+	}
+
+	public void setAvatar(String avatar) {
+		this.avatar = avatar;
+	}
+
+	public String getQrcode() {
+		return qrcode;
+	}
+
+	public void setQrcode(String qrcode) {
+		this.qrcode = qrcode;
+	}
+
 	public String getUrl() {
 		return url;
 	}

@@ -37,6 +37,17 @@ public class WXEntity {
 	 */
 	private String account;
 	
+	private String fileid;
+     
+     
+     public String getFileid() {
+			return fileid;
+		}
+
+		public void setFileid(String fileid) {
+			this.fileid = fileid;
+		}
+	
 	public WXEntity() {
 		this.is_att = ATT_NO;
 	}

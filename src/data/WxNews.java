@@ -2,6 +2,8 @@ package data;
 
 import java.util.List;
 
+import com.google.gson.Gson;
+
 public class WxNews {
 	
 	private AppMsgExtInfoEntity app_msg_ext_info;
@@ -27,8 +29,17 @@ public class WxNews {
     public static class CommMsgInfoEntity {
         private long datetime;
         private int type;
+        private String id;
 
-        public long getDatetime() {
+		public String getId() {
+			return id;
+		}
+
+		public void setId(String id) {
+			this.id = id;
+		}
+
+		public long getDatetime() {
             return datetime;
         }
 
@@ -43,6 +54,11 @@ public class WxNews {
         public void setType(int type) {
             this.type = type;
         }
+        
+        @Override
+        public String toString() {
+        	return new Gson().toJson(this);
+        }
     }
 
     public static class AppMsgExtInfoEntity {
@@ -54,6 +70,17 @@ public class WxNews {
         private String content_url;
 
         private List<MultiAppMsgItemListEntity> multi_app_msg_item_list;
+        
+        private String fileid;
+        
+        
+        public String getFileid() {
+			return fileid;
+		}
+
+		public void setFileid(String fileid) {
+			this.fileid = fileid;
+		}
 
         public String getTitle() {
             return title;
@@ -107,6 +134,17 @@ public class WxNews {
             private String title;
             private String digest;
             private String content_url;
+            
+            private String fileid;
+            
+            
+            public String getFileid() {
+    			return fileid;
+    		}
+
+    		public void setFileid(String fileid) {
+    			this.fileid = fileid;
+    		}
 
             public String getTitle() {
                 return title;
@@ -131,6 +169,21 @@ public class WxNews {
             public void setContent_url(String content_url) {
                 this.content_url = content_url;
             }
+            
+            @Override
+            public String toString() {
+            	return new Gson().toJson(this);
+            }
         }
+        
+        @Override
+        public String toString() {
+        	return new Gson().toJson(this);
+        }
+    }
+    
+    @Override
+    public String toString() {
+    	return new Gson().toJson(this);
     }
 }

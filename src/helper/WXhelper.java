@@ -30,19 +30,24 @@ public class WXhelper {
 	private static final String URL_HEAD = "http://mp.weixin.qq.com/";
 	private static final String URL_SEARCH = "http://weixin.sogou.com/weixin?";
 	private static final String PARAM_SEARCH = "type=1&ie=utf8&_sug_=y&_sug_type_=&w=01019900&sut=11458&sst0=1461036240572&lkt=0%2C0%2C0";
+
+	private static String avatar;
+	private static String file_id;
 	
 	public static JSONObject getSearchList(String account) throws Exception {
 		WXEntity entity = getUrlbyAccount(account);
 		JSONObject json = new JSONObject(entity.toString());
 		JSONArray array =  getNewsByUrl(entity.getUrl());
+		json.put("avatar", avatar);
 		json.put("news", array);
+		json.put("fileid", file_id);
 		return json;
 	}
 	
 	/**
 	 * 根据文章链接得到获取文章点赞，阅读数等信息的拼接
 	 * @param url 单独文章的链接
-	 * @return JSON格式的字符串
+	 * @return JSON 格式的字符串
 	 */
 	public static String replaceUrl(String url) {
 		String[] tx = url.split("\"content_url\":");
@@ -103,9 +108,10 @@ public class WXhelper {
 		Document doc2 = Jsoup.connect(url)
 				.userAgent("Mozilla")
 				.cookie("auth", "token")
-				.timeout(5000)
+				.timeout(7000)
 				.get();
 		String result = doc2.toString();
+		avatar = doc2.getElementsByClass("radius_avatar").get(0).getElementsByTag("img").get(0).attr("src");
 		//截取字符串，提取文章列表的链接
 		int p = result.indexOf("msgList");
 		//数据清洗，去除多余的字符串
@@ -116,7 +122,6 @@ public class WXhelper {
 		int p_s = text_json.indexOf("{");
 		int p_end = text_json.lastIndexOf("}");
 		text_json = text_json.substring(p_s, p_end + 1);
-		System.out.println(text_json);
 		JSONObject json = new JSONObject(text_json);
 		JSONArray array = json.optJSONArray("list");
 		if(array != null) {
@@ -127,9 +132,14 @@ public class WXhelper {
 				String title = wx.getApp_msg_ext_info().getTitle();
 				String subtitle = wx.getApp_msg_ext_info().getDigest();
 				String contenturl = wx.getApp_msg_ext_info().getContent_url();
+				String fileid = wx.getApp_msg_ext_info().getFileid();
+				file_id = wx.getComm_msg_info().getId();
+//				System.out.println(file_id);
 				String jsontext = WebUtil.sendGET(getReadUrl(contenturl));
 				SoGouWX swx = new Gson().fromJson(jsontext, SoGouWX.class);
 				swx.setTime(time);
+				swx.setUrl(getHtmlUrl(contenturl));
+				swx.setFileid(fileid);
 				swx.setTitle(title);
 				swx.setSubtitle(subtitle);
 				swx.setType(SoGouWX.TYPE_TOP);
@@ -141,8 +151,10 @@ public class WXhelper {
 						String itemurl = WebUtil.sendGET(getReadUrl(entity.getContent_url()));
 						SoGouWX mwx = new Gson().fromJson(itemurl, SoGouWX.class);
 						mwx.setTime(time);
+						mwx.setUrl(getHtmlUrl(entity.getContent_url()));
 						mwx.setTitle(entity.getTitle());
 						mwx.setSubtitle(entity.getDigest());
+						mwx.setFileid(entity.getFileid());
 						if(j == 0) {
 							mwx.setType(SoGouWX.TYPE_SECOND);
 						} else if(j == 1){
@@ -161,5 +173,9 @@ public class WXhelper {
 	
 	private static String getReadUrl(String url) {
 		return URL_HEAD + URL_REPLACE_ONE + url.substring(url.indexOf("?"), url.length() - 1) + URL_REPLACE_TWO;
+	}
+	
+	private static String getHtmlUrl(String url) {
+		return URL_HEAD + url.substring(url.indexOf("s"));
 	}
 }

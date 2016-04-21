@@ -15,6 +15,28 @@ public class SoGouWX {
 	private String subtitle;
 	private String type;
 	private String time;
+	private String url;
+	
+	
+	
+	 public String getUrl() {
+		return url;
+	}
+
+	public void setUrl(String url) {
+		this.url = url;
+	}
+
+	private String fileid;
+     
+     
+     public String getFileid() {
+			return fileid;
+		}
+
+		public void setFileid(String fileid) {
+			this.fileid = fileid;
+		}
 	
 	public String getType() {
 		return type;

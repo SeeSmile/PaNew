@@ -17,13 +17,19 @@ public class Test {
 	 */
 	public static void main(String[] args) {
 
+		String mainurl = "http://weibo.com/zhangzilin?from=feed&loc=nickname&is_hot=1";
 		try {
-			System.out.println(WXhelper.getSearchList("adwlfhd"));
+			Document doc = Jsoup.connect(mainurl)
+						.userAgent("Mozilla")
+						.cookie("auth", "token")
+						.timeout(5000)
+						.get();
+			System.out.println(doc.toString());
 		} catch (IOException e) {
-			System.out.println("网络连接超时!");
-		} catch (Exception e) {
-			System.out.println("程序内部报错...");
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
+		
 	}
 
 }

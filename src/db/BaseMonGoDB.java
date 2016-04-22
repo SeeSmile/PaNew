@@ -10,11 +10,15 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.sun.jndi.cosnaming.CNNameParser;
 
+import data.WXMonGoEntity;
+
 public class BaseMonGoDB {
 	
-	private static String DB_ADDRESS = "192.168.0.197";
+//	private static String DB_ADDRESS = "192.168.0.197";
+	private static String DB_ADDRESS = "203.195.238.137";
 	private static int DB_PORT = 27017;
-	private static String DB_NAME = "dbwx";
+//	private static String DB_NAME = "dbwx";
+	private static String DB_NAME = "360netnews";
 	private static String DB_COLLECTION = "data_wx";
 	
 	private MongoClient mClient;
@@ -66,5 +70,14 @@ public class BaseMonGoDB {
 				mDatabase = mClient.getDatabase(name);
 			}
 		}
+	}
+	
+	public String getName() {
+		return mDatabase.getName();
+	}
+	
+	public void getAllInfo() {
+		WXMonGoEntity en = (WXMonGoEntity) mDatabase.getCollection(DB_COLLECTION, WXMonGoEntity.class);
+		System.out.println(en.toString());
 	}
 }

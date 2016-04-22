@@ -64,15 +64,7 @@ public class WXJpanel extends javax.swing.JPanel {
 	}
 	
 	private void start() {
-		try {
-			WXhelper.getSearchList("a");
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		
 	}
 
 	//GEN-BEGIN:variables

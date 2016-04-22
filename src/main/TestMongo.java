@@ -16,6 +16,8 @@ import db.BaseMonGoDB;
 
 public class TestMongo {
 
+	public static final String last_name = "app7733";
+	private static boolean isrun = false;
 	/**
 	 * @param args
 	 */
@@ -31,27 +33,32 @@ public class TestMongo {
 					
 					@Override
 					public void run() {
-						String line;   
+						String line;
 						try {
 							while ((line = br.readLine()) != null) {   
-								  try {
-//								  System.out.println(line.trim() + "  | " + i);
-//								  i++;
-									  System.out.println("正在获取:" + line.trim());
-										JSONObject json = WXhelper.getSearchList(line.trim());
-										Document doc_main = new Document();
-										doc_main.put("account", BasicDBObject.parse(json.toString()));
-										BaseMonGoDB.getInstance().insertInfo(doc_main);
-									} catch (Exception e) {
-										e.printStackTrace();
-									} finally {
-										try {
-											Thread.sleep(4 * 1000);
-										} catch (InterruptedException e) {
+								if(line.trim().equals(last_name)) {
+									 isrun = true;
+								}
+								if(isrun) {
+									try {
+										  System.out.println("正在获取:" + line.trim());
+											JSONObject json = new WXhelper().getSearchList(line.trim());
+											Document doc_main = new Document();
+											doc_main.putAll(BasicDBObject.parse(json.toString()));
+											BaseMonGoDB.getInstance().insertInfo(doc_main);
+										} catch (Exception e) {
 											e.printStackTrace();
+										} finally {
+											try {
+												Thread.sleep(8 * 1000);
+											} catch (InterruptedException e) {
+												e.printStackTrace();
+											}
 										}
-									}
-							  }
+								}
+								
+								 
+						  }
 						} catch (IOException e) {
 							e.printStackTrace();
 						}
@@ -66,8 +73,6 @@ public class TestMongo {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}   
-		  
-		
 	}
 
 }

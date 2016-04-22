@@ -9,6 +9,8 @@ public class WXEntity {
 	public static final String ATT_YES = "1";
 	public static final String ATT_NO = "2";
 	
+	private String state;
+	
 	private String avatar;
 	
 	private String qrcode;
@@ -50,6 +52,7 @@ public class WXEntity {
 	
 	public WXEntity() {
 		this.is_att = ATT_NO;
+		state = "1";
 	}
 	
 	

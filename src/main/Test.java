@@ -5,6 +5,8 @@ import java.io.IOException;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
+import db.BaseMonGoDB;
+
 import ui.WXJpanel;
 import utils.WebUtil;
 
@@ -17,18 +19,7 @@ public class Test {
 	 */
 	public static void main(String[] args) {
 
-		String mainurl = "http://weibo.com/zhangzilin?from=feed&loc=nickname&is_hot=1";
-		try {
-			Document doc = Jsoup.connect(mainurl)
-						.userAgent("Mozilla")
-						.cookie("auth", "token")
-						.timeout(5000)
-						.get();
-			System.out.println(doc.toString());
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		BaseMonGoDB.getInstance().getAllInfo();
 		
 	}
 

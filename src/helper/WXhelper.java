@@ -3,6 +3,7 @@ package helper;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import javax.swing.JLabel;
 
@@ -22,7 +23,9 @@ import data.SoGouWX;
 import data.WXEntity;
 import data.WxNews;
 import data.WxNews.AppMsgExtInfoEntity.MultiAppMsgItemListEntity;
+import utils.AccountErrorException;
 import utils.FibdException;
+import utils.SwebUtil;
 import utils.WebUtil;
 public class WXhelper {
 	
@@ -36,7 +39,8 @@ public class WXhelper {
 	private static final String URL_REPLACE_ONE = "mp/getcomment";
 	private static final String URL_HEAD = "http://mp.weixin.qq.com/";
 	private static final String URL_SEARCH = "http://weixin.sogou.com/weixin?";
-	private static final String PARAM_SEARCH = "type=1&ie=utf8&_sug_=y&_sug_type_=&w=01019900&sut=11458&sst0=1461036240572&lkt=0%2C0%2C0";
+//	private static final String PARAM_SEARCH = "type=1&ie=utf8&_sug_=y&_sug_type_=&w=01019900&sut=11458&sst0=1461036240572&lkt=0%2C0%2C0";
+	private static final String PARAM_SEARCH = "type=1";
 
 	private String avatar;
 	private String file_id;
@@ -60,14 +64,9 @@ public class WXhelper {
 				.data("r", "%2Fweixin%3Ftype%3D1%26query%3Dchihewanlquan%26ie%3Dutf8%26_sug_%3Dn%26_sug_type_%3D")
 				.post();
 		System.out.println("doc:" + doc.toString());
-//		List<NameValuePair> param = new ArrayList<NameValuePair>();
-//		param.add(new BasicNameValuePair("c", code));
-//		param.add(new BasicNameValuePair("v", "5"));
-//		param.add(new BasicNameValuePair("r", "%2Fweixin%3Ftype%3D1%26query%3Dchihewanlquan%26ie%3Dutf8%26_sug_%3Dn%26_sug_type_%3D"));
-//		System.out.println(WebUtil.sendPOST(URL_GO, param));
 	}
 
-	public JSONObject getSearchList(String account) throws IOException, FibdException {
+	public JSONObject getSearchList(String account) throws IOException, FibdException, AccountErrorException {
 		WXEntity entity = getUrlbyAccount(account);
 		JSONObject json = null;
 		try {
@@ -75,7 +74,7 @@ public class WXhelper {
 			JSONArray array =  getNewsByUrl(entity.getUrl());
 			json.put("avatar", avatar);
 			json.put("news", array);
-			json.put("fileid", file_id);
+			json.put("sid", file_id);
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
@@ -96,28 +95,48 @@ public class WXhelper {
 		return text;
 	}
 	
-	private static WXEntity getUrlbyAccount(String account) throws IOException, FibdException {
+	public static String getUrl(String account) {
+		return URL_SEARCH + PARAM_SEARCH + "&query=" + account;
+	}
+	
+	public static WXEntity getUrlbyAccount(String account) throws IOException, FibdException, AccountErrorException {
 		//调用搜狗搜索相应的微信号
 		String mainurl = URL_SEARCH + PARAM_SEARCH + "&query=" + account;
-//		String html = "";
-//		try {
-//			html = WebUtil.sendGET(mainurl);
-//		} catch (Exception e1) {
-//			// TODO Auto-generated catch block
-//			e1.printStackTrace();
-//		}
-//		Document doc = Jsoup.parse(html);
-		Document doc = Jsoup.connect(mainurl)
+		Random rand = new Random();
+		int x = rand.nextInt(10);
+		System.out.print(" 获取主账号信息x=" + x + ";");
+		Document doc;
+		if(x % 3 == 0) {
+			String html = "";
+			try {
+				html = WebUtil.sendGET(mainurl);
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			doc = Jsoup.parse(html);
+		} else if(x % 3 == 1) {
+			String html = "";
+			try {
+				html = WebUtil.getHttpContent(mainurl);
+			} catch (Exception e1) {
+				
+				e1.printStackTrace();
+			}
+			doc = Jsoup.parse(html);
+		} else {
+			doc = Jsoup.connect(mainurl)
 					.userAgent("Mozilla")
 					.cookie("auth", "token")
 					.timeout(5000)
 					.get();
+		}
+//		doc = Jsoup.parse(WebUtil.getRandomGet(mainurl));
+			
 		Elements eles = doc.getElementsByClass("weixin-public");
 		if(eles.size() == 0) {
-			System.out.println("hehe, 禁止访问了");
-			String img = URL_IMG + doc.getElementsByClass("s1").get(1).select("img[src]").attr("src").toString();
-			System.out.println("img:" + img);
-			throw new FibdException(img);
+//			String img = URL_IMG + doc.getElementsByClass("s1").get(1).select("img[src]").attr("src").toString();
+			throw new FibdException("图片地址", doc.text());
 		}
 		Element ele = eles.get(0);
 		WXEntity entity = new WXEntity();
@@ -132,6 +151,9 @@ public class WXhelper {
 			}
 		}
 //		System.out.println("ele:" + ele.getElementsByTag("div"));
+		if(ele.select("div[href]").size() == 0) {
+			throw new AccountErrorException(account);
+		}
 		String url = ele.select("div[href]").get(0).attr("href");
 		ele = ele.getElementsByClass("txt-box").get(0);
 		String name = ele.getElementsByTag("h3").text();
@@ -157,22 +179,41 @@ public class WXhelper {
 	}
 	
 	private JSONArray getNewsByUrl(String url) throws IOException {
-		//获取第一条微信公众号的主页
-//		Document doc2 = Jsoup.connect(url)
-//				.userAgent("Mozilla")
-//				.cookie("auth", "token")
-//				.timeout(7000)
-//				.get();
+		Random rand = new Random();
+		int x = rand.nextInt(10);
+		Document doc2;
 		String html = "";
-		try {
-			html = WebUtil.sendGET(url);
-		} catch (Exception e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+		String result = "";
+		System.out.print(" 开始获取新闻x=" + x + ";");
+		if(x % 3 == 0) {
+			//获取第一条微信公众号的主页
+			doc2 = Jsoup.connect(url)
+					.userAgent("Mozilla")
+					.cookie("auth", "token")
+					.timeout(7000)
+					.get();
+			result = doc2.toString();
+		} else if(x % 3 == 1) {
+			try {
+				html = WebUtil.sendGET(url);
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			doc2 = Jsoup.parse(html);
+			result = html;
+		} else {
+			try {
+				html = WebUtil.getHttpContent(url);
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			doc2 = Jsoup.parse(html);
+			result = html;
 		}
-		Document doc2 = Jsoup.parse(html);
-		String result = html;
-//		String result = doc2.toString();
+//		doc2 = Jsoup.parse(WebUtil.getRandomGet(url));
+		result = doc2.toString();
 		avatar = doc2.getElementsByClass("radius_avatar").get(0).getElementsByTag("img").get(0).attr("src");
 		//截取字符串，提取文章列表的链接
 		int p = result.indexOf("msgList");
@@ -233,6 +274,7 @@ public class WXhelper {
 								mwx.setType(SoGouWX.TYPE_OTHER);
 							}
 							dataArray.put(new JSONObject(mwx.toString()));
+							Thread.sleep((long) (500 * (rand.nextDouble() + 0.1)));
 						}
 					}
 				} catch (JsonSyntaxException e) {
@@ -242,6 +284,12 @@ public class WXhelper {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				try {
+					Thread.sleep((long) (1000 * (rand.nextDouble() + 0.1)));
+				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}

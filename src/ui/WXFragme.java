@@ -20,6 +20,7 @@ import org.bson.Document;
 import org.json.JSONObject;
 import org.jsoup.Jsoup;
 
+import utils.AccountErrorException;
 import utils.FibdException;
 import utils.FileUtil;
 import utils.WebUtil;
@@ -158,6 +159,9 @@ public class WXFragme extends javax.swing.JFrame {
 											} catch (Exception e1) {
 												e1.printStackTrace();
 											}
+										} catch (AccountErrorException e) {
+											// TODO Auto-generated catch block
+											e.printStackTrace();
 										} finally {
 											try {
 												Thread.sleep(5 * 1000);

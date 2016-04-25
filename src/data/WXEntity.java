@@ -1,7 +1,5 @@
 package data;
 
-import sun.security.krb5.internal.Ticket;
-
 import com.google.gson.Gson;
 
 public class WXEntity {

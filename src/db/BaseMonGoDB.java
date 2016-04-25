@@ -2,14 +2,10 @@ package db;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.bson.Document;
-
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
-import com.sun.jndi.cosnaming.CNNameParser;
-
 import data.WXMonGoEntity;
 
 public class BaseMonGoDB {

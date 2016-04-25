@@ -21,9 +21,9 @@ import utils.WebUtil;
 import com.mongodb.BasicDBObject;
 import db.BaseMonGoDB;
 
-public class TestMongo {
+public class CopyOfTestMongo {
 
-	public static final String last_name = "hlwpdw";
+	public static final String last_name = "hhhlw889";
 	public static final String PATH_NOACCOUNT = "d:/noaccount.txt";
 	private static boolean isrun = false;
 	private static int index = 0;
@@ -47,8 +47,11 @@ public class TestMongo {
 						try {
 							while ((line = br.readLine()) != null) {   
 								index++;
-								if(line.trim().equals(last_name)) {
-									 isrun = true;
+//								if(line.trim().equals(last_name)) {
+//									 isrun = true;
+//								}
+								if(index > 3000) {
+									isrun = true;
 								}
 								if(isrun && line.length() > 0) {
 									long start_time = System.currentTimeMillis();

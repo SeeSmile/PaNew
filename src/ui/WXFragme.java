@@ -143,7 +143,7 @@ public class WXFragme extends javax.swing.JFrame {
 									try {
 										currentname = line.trim();
 										    tv_result.setText("正在获取:" + line.trim());
-											JSONObject json = new WXhelper().getSearchList(line.trim());
+											JSONObject json = new WXhelper().getSearchList(line.trim(), null);
 											Document doc_main = new Document();
 											doc_main.put("account", BasicDBObject.parse(json.toString()));
 											BaseMonGoDB.getInstance().insertInfo(doc_main);

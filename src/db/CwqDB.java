@@ -18,6 +18,15 @@ import data.CwqWX;
 
 public class CwqDB extends BaseDB{
 	
+	private final static String ip = "192.168.0.196";
+	private final static String dbname = "media";
+	private final static String name = "media";
+	private final static String password = "media";
+	
+	public CwqDB() {
+		super(ip, dbname, name, password);
+	}
+
 	private static final String TABLE_MAIN = "ysh_business_inf";
 	private static final String TABLE_PRICE = "ysh_oper_catogory";
 	
@@ -45,7 +54,7 @@ public class CwqDB extends BaseDB{
 	public static final String UID = "98";
 	public static final String TJXS = "3";
 	
-	public static void add(CwqWX data, String type_id) throws SQLException {
+	public void add(CwqWX data, String type_id) throws SQLException {
 		ArrayList<DbParams> list = new ArrayList<DbParams>();
 		list.add(new DbParams(CA_NAME, data.getBs_account_name()));
 		list.add(new DbParams(CA_ACCOUNT, data.getBs_weixinhao()));
@@ -68,7 +77,7 @@ public class CwqDB extends BaseDB{
 		state.close();
 	}
 	
-	public static String getId(String account) throws SQLException {
+	public String getId(String account) throws SQLException {
 		String sql = "select ca_id from " + TABLE_PRICE + " where " + CA_ACCOUNT + "=?";
 		PreparedStatement pStatement = getPrepared(sql);
 		pStatement.setString(1, account);
@@ -80,7 +89,7 @@ public class CwqDB extends BaseDB{
 		return null;
 	}
 	
-	private static void addPrice(String id, CwqWX entity) throws SQLException {
+	private void addPrice(String id, CwqWX entity) throws SQLException {
 		ArrayList<DbParams> list = new ArrayList<DbParams>();
 		list.add(new DbParams(KEY_MID, id));
 		list.add(new DbParams(KEY_UID, UID));
@@ -97,7 +106,7 @@ public class CwqDB extends BaseDB{
 		state.execute();
 	}
 	
-	private static void update(String id, String url) throws SQLException {
+	private void update(String id, String url) throws SQLException {
 		String sql = "update " + TABLE_PRICE + " set " + CA_ICON + "=?where ca_id=?";
 		PreparedStatement state = getPrepared(sql);
 		state.setString(1, "/Uploads/20160418/" + url);
@@ -113,7 +122,7 @@ public class CwqDB extends BaseDB{
 		return price;
 	}
 	
-	public static void saveFile() throws SQLException{
+	public void saveFile() throws SQLException{
 		String sql = "select ca_icon, ca_id from " + TABLE_PRICE;
 		final PreparedStatement state = getPrepared(sql);
 		

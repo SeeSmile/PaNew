@@ -8,6 +8,6 @@ public class AccountErrorException extends Exception {
 	}
 	
 	public void showError() {
-		System.out.println("不存在 " + name);
+		System.out.print(" 不存在 " + name + ";");
 	}
 }

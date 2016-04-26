@@ -8,21 +8,41 @@ import java.util.ArrayList;
 
 public class BaseDB {
 	
-	public static final String DB_USER = "media";
-	public static final String DB_PASSWORD = "mediamedia";
-	public static final String DB_IP = "192.168.0.196";
-	public static final String DB_URL = "jdbc:mysql://" + DB_IP + "/media?characterEncoding=utf8";
 	public static final String TYPE_DB_NAME = "com.mysql.jdbc.Driver";
-	
+	private String name;
+	private String password;
+	private String ip;
+	private String dbname;
 	public static Connection conn = null;
 	
-	public static void connectDB() {
+	public BaseDB(String ip, String dbname,String name, String password) {
+		
+		this.ip = ip;
+		this.dbname = dbname;
+		this.name = name;
+		this.password = password;
+		
 		try {
 			Class.forName(TYPE_DB_NAME);
 			if(conn != null && !conn.isClosed()) {
 				
 			} else {
-				conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
+				String uri = "jdbc:mysql://" + ip + "/" + dbname + "?characterEncoding=utf8";
+				conn = DriverManager.getConnection(uri, name, password);
+			}
+		} catch (Exception e) {
+			System.out.println("连接数据库失败");
+		}
+	}
+	
+	public void connectDB() {
+		try {
+			Class.forName(TYPE_DB_NAME);
+			if(conn != null && !conn.isClosed()) {
+				
+			} else {
+				String uri = "jdbc:mysql://" + ip + "/" + dbname + "?characterEncoding=utf8";
+				conn = DriverManager.getConnection(uri, name, password);
 			}
 		} catch (Exception e) {
 			System.out.println("连接数据库失败");
@@ -35,7 +55,7 @@ public class BaseDB {
 	 * @return SQL操作对象
 	 * @throws SQLException 执行SQL语句异常
 	 */
-	public static PreparedStatement getPrepared(String sql) throws SQLException {
+	public PreparedStatement getPrepared(String sql) throws SQLException {
 		connectDB();
 		if(conn != null) {
 			return conn.prepareStatement(sql);

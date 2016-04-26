@@ -74,13 +74,14 @@ public class CwqHelper {
 			
 			@Override
 			public void run() {
+				final CwqDB db = new CwqDB();
 				startGetList(getWXParam(id), URL_WEIXIN, new GetListener() {
 					
 					@Override
 					public void OnFinish(JSONObject json) {
 						CwqWX wx = new Gson().fromJson(json.toString(), CwqWX.class);
 						try {
-							CwqDB.add(wx, type_id);
+							db.add(wx, type_id);
 						} catch (SQLException e) {
 							System.out.println("加入数据库失败");
 							System.out.println("data:" + json.toString());

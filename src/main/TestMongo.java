@@ -10,8 +10,12 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.http.HttpHost;
 import org.bson.Document;
 import org.json.JSONObject;
+
+import helper.AgencyHelper;
+import helper.AgencyHelper.HostLoadListener;
 import helper.WXhelper;
 import utils.AccountErrorException;
 import utils.FibdException;
@@ -23,7 +27,7 @@ import db.BaseMonGoDB;
 
 public class TestMongo {
 
-	public static final String last_name = "hlwpdw";
+	public static final String last_name = "nvrennxshi";
 	public static final String PATH_NOACCOUNT = "d:/noaccount.txt";
 	private static boolean isrun = false;
 	private static int index = 0;
@@ -33,6 +37,28 @@ public class TestMongo {
 	 * @param args
 	 */
 	public static void main(String[] args) {
+		AgencyHelper.getHostList(1, new HostLoadListener() {
+			
+			@Override
+			public void onProgress(int page) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void onLoadFinish(List<HttpHost> list) {
+				start(list);
+			}
+			
+			@Override
+			public void onFailed() {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+	}
+	
+	public static void start(final List<HttpHost> list) {
 		FileInputStream fis;
 		try {
 			fis = new FileInputStream(new File("d:/abc.txt"));
@@ -54,7 +80,7 @@ public class TestMongo {
 									long start_time = System.currentTimeMillis();
 									try {
 										  System.out.print("正在" + index + "行数据:" + line.trim() + "; ");
-											JSONObject json = new WXhelper().getSearchList(line.trim());
+											JSONObject json = new WXhelper().getSearchList(line.trim(), list);
 											Document doc_main = new Document();
 											doc_main.putAll(BasicDBObject.parse(json.toString()));
 											BaseMonGoDB.getInstance().insertInfo(doc_main);
@@ -62,14 +88,10 @@ public class TestMongo {
 											System.out.println("\nIOE错误");
 										} catch (FibdException e) {
 											System.out.println(" 被禁了:" + line.trim());
-											System.out.println(" 未知列表:");
-											for(String s : list_unknow) {
-												System.out.println(s);
-											}
 											break;
 										} catch (AccountErrorException e) {
 											list_unknow.add(line.trim());
-											FileUtil.writeText2File(PATH_NOACCOUNT, "\n:" + line.trim());
+											FileUtil.writeText2File(PATH_NOACCOUNT, line.trim());
 											e.showError();
 										} finally {
 											try {
@@ -87,8 +109,6 @@ public class TestMongo {
 						}
 					}
 				}).start();
-				
-			  
 		} catch (FileNotFoundException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();

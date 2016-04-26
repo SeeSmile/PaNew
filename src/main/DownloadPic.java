@@ -18,7 +18,7 @@ public class DownloadPic {
 	 */
 	public static void main(String[] args) {
 		try {
-			CwqDB.saveFile();
+			new CwqDB().saveFile();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -7,6 +7,7 @@ import java.util.Random;
 
 import javax.swing.JLabel;
 
+import org.apache.http.HttpHost;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
@@ -47,6 +48,8 @@ public class WXhelper {
 	private JLabel j_img;
 	private JLabel j_result;
 	
+	private static SwebUtil mutil;
+	
 //	
 //	public WXhelper(JLabel jlb_img, JLabel jlb_result) {
 //		this.j_img = jlb_img;
@@ -66,7 +69,8 @@ public class WXhelper {
 		System.out.println("doc:" + doc.toString());
 	}
 
-	public JSONObject getSearchList(String account) throws IOException, FibdException, AccountErrorException {
+	public JSONObject getSearchList(String account, List<HttpHost> list) throws IOException, FibdException, AccountErrorException {
+		mutil = new SwebUtil(list);
 		WXEntity entity = getUrlbyAccount(account);
 		JSONObject json = null;
 		try {
@@ -104,34 +108,34 @@ public class WXhelper {
 		String mainurl = URL_SEARCH + PARAM_SEARCH + "&query=" + account;
 		Random rand = new Random();
 		int x = rand.nextInt(10);
-		System.out.print(" 获取主账号信息x=" + x + ";");
+		System.out.print(" 获取主账号信息;");
 		Document doc;
-		if(x % 3 == 0) {
-			String html = "";
-			try {
-				html = WebUtil.sendGET(mainurl);
-			} catch (Exception e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-			doc = Jsoup.parse(html);
-		} else if(x % 3 == 1) {
-			String html = "";
-			try {
-				html = WebUtil.getHttpContent(mainurl);
-			} catch (Exception e1) {
-				
-				e1.printStackTrace();
-			}
-			doc = Jsoup.parse(html);
-		} else {
-			doc = Jsoup.connect(mainurl)
-					.userAgent("Mozilla")
-					.cookie("auth", "token")
-					.timeout(5000)
-					.get();
-		}
-//		doc = Jsoup.parse(WebUtil.getRandomGet(mainurl));
+//		if(x % 3 == 0) {
+//			String html = "";
+//			try {
+//				html = WebUtil.sendGET(mainurl);
+//			} catch (Exception e1) {
+//				// TODO Auto-generated catch block
+//				e1.printStackTrace();
+//			}
+//			doc = Jsoup.parse(html);
+//		} else if(x % 3 == 1) {
+//			String html = "";
+//			try {
+//				html = WebUtil.getHttpContent(mainurl);
+//			} catch (Exception e1) {
+//				
+//				e1.printStackTrace();
+//			}
+//			doc = Jsoup.parse(html);
+//		} else {
+//			doc = Jsoup.connect(mainurl)
+//					.userAgent("Mozilla")
+//					.cookie("auth", "token")
+//					.timeout(5000)
+//					.get();
+//		}
+		doc = Jsoup.parse(mutil.doPortGet(mainurl));
 			
 		Elements eles = doc.getElementsByClass("weixin-public");
 		if(eles.size() == 0) {
@@ -184,35 +188,37 @@ public class WXhelper {
 		Document doc2;
 		String html = "";
 		String result = "";
-		System.out.print(" 开始获取新闻x=" + x + ";");
-		if(x % 3 == 0) {
-			//获取第一条微信公众号的主页
-			doc2 = Jsoup.connect(url)
-					.userAgent("Mozilla")
-					.cookie("auth", "token")
-					.timeout(7000)
-					.get();
-			result = doc2.toString();
-		} else if(x % 3 == 1) {
-			try {
-				html = WebUtil.sendGET(url);
-			} catch (Exception e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-			doc2 = Jsoup.parse(html);
-			result = html;
-		} else {
-			try {
-				html = WebUtil.getHttpContent(url);
-			} catch (Exception e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-			doc2 = Jsoup.parse(html);
-			result = html;
-		}
-//		doc2 = Jsoup.parse(WebUtil.getRandomGet(url));
+		System.out.print(" 开始获取新闻;");
+//		if(x % 3 == 0) {
+//			//获取第一条微信公众号的主页
+//			doc2 = Jsoup.connect(url)
+//					.userAgent("Mozilla")
+//					.cookie("auth", "token")
+//					.timeout(7000)
+//					.get();
+//			result = doc2.toString();
+//		} else if(x % 3 == 1) {
+//			try {
+//				html = WebUtil.sendGET(url);
+//			} catch (Exception e1) {
+//				// TODO Auto-generated catch block
+//				e1.printStackTrace();
+//			}
+//			doc2 = Jsoup.parse(html);
+//			result = html;
+//		} else {
+//			try {
+//				html = WebUtil.getHttpContent(url);
+//			} catch (Exception e1) {
+//				// TODO Auto-generated catch block
+//				e1.printStackTrace();
+//			}
+//			doc2 = Jsoup.parse(html);
+//			result = html;
+//		}
+		
+		doc2 = Jsoup.parse(mutil.doPortGet(url));
+		
 		result = doc2.toString();
 		avatar = doc2.getElementsByClass("radius_avatar").get(0).getElementsByTag("img").get(0).attr("src");
 		//截取字符串，提取文章列表的链接
@@ -229,7 +235,6 @@ public class WXhelper {
 		try {
 			json = new JSONObject(text_json);
 		} catch (JSONException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		JSONArray array = json.optJSONArray("list");
@@ -245,21 +250,31 @@ public class WXhelper {
 					String contenturl = wx.getApp_msg_ext_info().getContent_url();
 					String fileid = wx.getApp_msg_ext_info().getFileid();
 					file_id = wx.getComm_msg_info().getId();
-//					System.out.println(file_id);
-					String jsontext = WebUtil.sendGET(getReadUrl(contenturl));
-					SoGouWX swx = new Gson().fromJson(jsontext, SoGouWX.class);
-					swx.setTime(time);
-					swx.setUrl(getHtmlUrl(contenturl));
-					swx.setFileid(fileid);
-					swx.setTitle(title);
-					swx.setSubtitle(subtitle);
-					swx.setType(SoGouWX.TYPE_TOP);
-					dataArray.put(new JSONObject(swx.toString()));
+							
+					String jsontext = "";
+					try {
+						jsontext = mutil.doPortGet(getReadUrl(contenturl));
+						SoGouWX swx = new Gson().fromJson(jsontext, SoGouWX.class);
+						swx.setTime(time);
+						swx.setUrl(getHtmlUrl(contenturl));
+						swx.setFileid(fileid);
+						swx.setTitle(title);
+						swx.setSubtitle(subtitle);
+						swx.setType(SoGouWX.TYPE_TOP);
+						dataArray.put(new JSONObject(swx.toString()));
+					} catch (StringIndexOutOfBoundsException e1) {
+						System.out.print("  单图文头条不存在;");
+					}
 					if(wx.getApp_msg_ext_info().getIs_multi() == 1) {
 						List<MultiAppMsgItemListEntity> list = wx.getApp_msg_ext_info().getMulti_app_msg_item_list();
 						for(int j = 0; j < list.size(); j++) {
 							MultiAppMsgItemListEntity entity = list.get(j);
-							String itemurl = WebUtil.sendGET(getReadUrl(entity.getContent_url()));
+							String itemurl = "";
+							try {
+								itemurl = WebUtil.sendGET(getReadUrl(entity.getContent_url()));
+							} catch (Exception e) {
+								System.out.println("3-n条报错：\n" + entity.toString());
+							}
 							SoGouWX mwx = new Gson().fromJson(itemurl, SoGouWX.class);
 							mwx.setTime(time);
 							mwx.setUrl(getHtmlUrl(entity.getContent_url()));
@@ -274,7 +289,12 @@ public class WXhelper {
 								mwx.setType(SoGouWX.TYPE_OTHER);
 							}
 							dataArray.put(new JSONObject(mwx.toString()));
-							Thread.sleep((long) (500 * (rand.nextDouble() + 0.1)));
+//							try {
+//								Thread.sleep((long) (800 * (rand.nextDouble() + 0.1)));
+//							} catch (InterruptedException e) {
+//								// TODO Auto-generated catch block
+//								e.printStackTrace();
+//							}
 						}
 					}
 				} catch (JsonSyntaxException e) {
@@ -283,16 +303,13 @@ public class WXhelper {
 				} catch (JSONException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
 				}
-				try {
-					Thread.sleep((long) (1000 * (rand.nextDouble() + 0.1)));
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+//				try {
+//					Thread.sleep((long) (700 * (rand.nextDouble() + 0.1)));
+//				} catch (InterruptedException e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				}
 				
 			}
 			return dataArray;
@@ -300,8 +317,9 @@ public class WXhelper {
 		return null;
 	}
 	
-	private String getReadUrl(String url) {
-		return URL_HEAD + URL_REPLACE_ONE + url.substring(url.indexOf("?"), url.length() - 1) + URL_REPLACE_TWO;
+	private String getReadUrl (String url) throws StringIndexOutOfBoundsException{
+		int postion = url.indexOf("?");
+		return URL_HEAD + URL_REPLACE_ONE + url.substring(postion, url.length() - 1) + URL_REPLACE_TWO;
 	}
 	
 	private String getHtmlUrl(String url) {

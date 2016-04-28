@@ -31,6 +31,7 @@ public class BaseDB {
 				conn = DriverManager.getConnection(uri, name, password);
 			}
 		} catch (Exception e) {
+			e.printStackTrace();
 			System.out.println("连接数据库失败");
 		}
 	}

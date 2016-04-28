@@ -71,7 +71,7 @@ public class WXhelper {
 
 	public JSONObject getSearchList(String account, List<HttpHost> list) throws IOException, FibdException, AccountErrorException {
 		mutil = new SwebUtil(list);
-		WXEntity entity = getUrlbyAccount(account);
+		WXEntity entity = getUrlbyAccount(account, null);
 		JSONObject json = null;
 		try {
 			json = new JSONObject(entity.toString());
@@ -103,7 +103,9 @@ public class WXhelper {
 		return URL_SEARCH + PARAM_SEARCH + "&query=" + account;
 	}
 	
-	public static WXEntity getUrlbyAccount(String account) throws IOException, FibdException, AccountErrorException {
+	public static WXEntity getUrlbyAccount(String account, List<HttpHost> list) throws IOException, FibdException, AccountErrorException {
+		
+		mutil = new SwebUtil(list);
 		//调用搜狗搜索相应的微信号
 		String mainurl = URL_SEARCH + PARAM_SEARCH + "&query=" + account;
 		Random rand = new Random();

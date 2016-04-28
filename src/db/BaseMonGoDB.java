@@ -2,10 +2,23 @@ package db;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import org.bson.BsonDocument;
 import org.bson.Document;
+import org.bson.codecs.configuration.CodecRegistry;
+import org.bson.conversions.Bson;
+
+import com.mongodb.BasicDBObject;
+import com.mongodb.DB;
+import com.mongodb.DBCursor;
+import com.mongodb.DBObject;
 import com.mongodb.MongoClient;
+import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.MongoIterable;
+
 import data.WXMonGoEntity;
 
 public class BaseMonGoDB {
@@ -15,7 +28,7 @@ public class BaseMonGoDB {
 	private static int DB_PORT = 27017;
 //	private static String DB_NAME = "dbwx";
 	private static String DB_NAME = "360netnews";
-	private static String DB_COLLECTION = "data_wx";
+	private static String DB_COLLECTION = "wlf_data_wx";
 	
 	private MongoClient mClient;
 	private MongoDatabase mDatabase;
@@ -69,11 +82,26 @@ public class BaseMonGoDB {
 	}
 	
 	public String getName() {
+		MongoIterable<String> list = mDatabase.listCollectionNames();
+		for(String s : list) {
+			System.out.println("s:" + s);
+		}
 		return mDatabase.getName();
 	}
 	
 	public void getAllInfo() {
-		WXMonGoEntity en = (WXMonGoEntity) mDatabase.getCollection(DB_COLLECTION, WXMonGoEntity.class);
-		System.out.println(en.toString());
+		MongoCursor<Document> cursor = mDatabase.getCollection(DB_COLLECTION).find().iterator();
+		try {
+			int i = 0;
+		    while (cursor.hasNext()) {
+		    	if(i > 9) {
+		    		break;
+		    	}
+		        System.out.println(cursor.next().toJson());
+		        i++;
+		    }
+		} finally {
+		    cursor.close();
+		}
 	}
 }

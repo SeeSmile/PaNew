@@ -9,6 +9,9 @@ import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.http.HttpHost;
 import org.bson.Document;
@@ -23,12 +26,14 @@ import utils.FileUtil;
 import utils.WebUtil;
 
 import com.mongodb.BasicDBObject;
+
+import data.WXEntity;
 import db.BaseMonGoDB;
 
 public class TestMongo {
 
-	public static final String last_name = "nvrennxshi";
-	public static final String PATH_NOACCOUNT = "d:/noaccount.txt";
+	public static final String last_name = "524";
+	public static final String PATH_NOACCOUNT = "c:/noaccount2.txt";
 	private static boolean isrun = false;
 	private static int index = 0;
 	private static List<String> list_unknow = new ArrayList<>();
@@ -37,22 +42,24 @@ public class TestMongo {
 	 * @param args
 	 */
 	public static void main(String[] args) {
+		//110.73.11.68   8123
 		AgencyHelper.getHostList(1, new HostLoadListener() {
 			
 			@Override
 			public void onProgress(int page) {
-				// TODO Auto-generated method stub
 				
 			}
 			
 			@Override
 			public void onLoadFinish(List<HttpHost> list) {
+//				for(HttpHost h : list) {
+//					System.out.println(h.getHostName() + ":" + h.getPort());
+//				}
 				start(list);
 			}
 			
 			@Override
 			public void onFailed() {
-				// TODO Auto-generated method stub
 				
 			}
 		});
@@ -61,33 +68,45 @@ public class TestMongo {
 	public static void start(final List<HttpHost> list) {
 		FileInputStream fis;
 		try {
-			fis = new FileInputStream(new File("d:/abc.txt"));
+			fis = new FileInputStream(new File("c:/avatar2.txt"));
 			InputStreamReader isr = new InputStreamReader(fis, "UTF-8");   
 			  final BufferedReader br = new BufferedReader(isr);   
 				  new Thread(new Runnable() {
 					
 					@Override
 					public void run() {
-//						WebUtil.getCookie();
 						String line;
 						try {
 							while ((line = br.readLine()) != null) {   
 								index++;
-								if(line.trim().equals(last_name)) {
-									 isrun = true;
+
+//								if(line.trim().equals(last_name)) {
+//									 isrun = true;
+//								}
+								if(index == Integer.valueOf(last_name)) {
+									isrun = true;
 								}
 								if(isrun && line.length() > 0) {
+									String text = "";
 									long start_time = System.currentTimeMillis();
+									Pattern p = Pattern.compile("\\s*");
+									Matcher m = p.matcher(line);
+									text = m.replaceAll("");
+									text = line.replaceAll(" ", "");
 									try {
-										  System.out.print("’˝‘⁄" + index + "–– ˝æ›:" + line.trim() + "; ");
-											JSONObject json = new WXhelper().getSearchList(line.trim(), list);
-											Document doc_main = new Document();
-											doc_main.putAll(BasicDBObject.parse(json.toString()));
-											BaseMonGoDB.getInstance().insertInfo(doc_main);
+										  System.out.print("Ê≠£Âú®" + index + "Ë°åÊï∞ÊçÆ:" + text + "; ");
+										  	WXEntity en = new WXhelper().getUrlbyAccount(text.trim(), list);
+										  	FileUtil.writeText2File("c:/weixin2.txt", line + "|" + en.getAvatar());
+//											JSONObject json = new WXhelper().getSearchList(line.trim(), list);
+//											Document doc_main = new Document();
+//											doc_main.putAll(BasicDBObject.parse(json.toString()));
+//											BaseMonGoDB.getInstance().insertInfo(doc_main);
 										} catch (IOException e) {
-											System.out.println("\nIOE¥ÌŒÛ");
+											System.out.println("\nIOEÈîôËØØ");
+											e.printStackTrace();
+											break;
 										} catch (FibdException e) {
-											System.out.println(" ±ªΩ˚¡À:" + line.trim());
+											System.out.println(" Ë¢´Á¶Å‰∫Ü:" + line.trim());
 											break;
 										} catch (AccountErrorException e) {
 											list_unknow.add(line.trim());
@@ -95,8 +114,10 @@ public class TestMongo {
 											e.showError();
 										} finally {
 											try {
-												Thread.sleep(1 * 1000);
-												System.out.println(" ∫ƒ ±: " + (System.currentTimeMillis() - start_time) / 1000 + "√Î");
+												
+												
+												Thread.sleep(new Random().nextInt(8) * 1000);
+												System.out.println(" ËÄóÊó∂: " + (System.currentTimeMillis() - start_time) / 1000 + "Áßí");
 											} catch (InterruptedException e) {
 												e.printStackTrace();
 											}

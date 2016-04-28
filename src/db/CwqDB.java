@@ -21,7 +21,7 @@ public class CwqDB extends BaseDB{
 	private final static String ip = "192.168.0.196";
 	private final static String dbname = "media";
 	private final static String name = "media";
-	private final static String password = "media";
+	private final static String password = "mediamedia";
 	
 	public CwqDB() {
 		super(ip, dbname, name, password);
@@ -211,4 +211,13 @@ public class CwqDB extends BaseDB{
 		is.close();
 	}
 	
+	public void insertWX(String account, String url) throws SQLException {
+		ArrayList<DbParams> list = new ArrayList<DbParams>();
+		list.add(new DbParams("account", account));
+		list.add(new DbParams("url", "Public/wxpic/" + url));
+		String sql = createInsertSql("image_wx", list);
+		PreparedStatement state = getPrepared(sql);
+		initPst(state, list);
+		state.execute();
+	}
 }

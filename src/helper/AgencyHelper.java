@@ -30,20 +30,19 @@ public class AgencyHelper {
 								.timeout(7000)
 								.get();
 						Element ele = doc.getElementsByTag("tbody").get(0);
-						boolean isFirst = true;
+						int index = 0;
 						for(Element e : ele.getElementsByTag("tr")) {
-							
 							String ip = null;
 							String port = null;
 							Elements eles = e.getElementsByTag("td");
-							if(isFirst) {
-								isFirst = false;
+							if(index < 2) {
+								index++;
 							} else {
 								for(int i = 0; i < eles.size(); i++) {
-									if(i == 2) {
+									if(i == 1) {
 										ip = eles.get(i).text();
 									}
-									if(i == 3) {
+									if(i == 2) {
 										port = eles.get(i).text();
 									}
 								}

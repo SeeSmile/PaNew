@@ -8,6 +8,6 @@ public class AccountErrorException extends Exception {
 	}
 	
 	public void showError() {
-		System.out.print(" ²»´æÔÚ " + name + ";");
+		System.out.print(" ä¸å­˜åœ¨ " + name + ";");
 	}
 }

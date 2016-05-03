@@ -15,6 +15,7 @@ import com.google.gson.Gson;
 
 import data.WXEntity;
 import db.CwqDB;
+import db.YunSpider;
 import utils.FileUtil;
 import utils.MD5Util;
 import utils.SFileUtil;
@@ -29,7 +30,7 @@ public class DownloadPic {
 	public static void main(String[] args) {
 		FileInputStream fis;
 		try {
-			fis = new FileInputStream(new File(SFileUtil.getDataFile("weixin_avatar.txt")));
+			fis = new FileInputStream(new File(SFileUtil.getDataFile("avatar.txt")));
 			InputStreamReader isr = new InputStreamReader(fis, "UTF-8");   
 			  final BufferedReader br = new BufferedReader(isr);   
 				  new Thread(new Runnable() {
@@ -37,10 +38,10 @@ public class DownloadPic {
 					@Override
 					public void run() {
 						String line;
-						String path = "f:/images";
+						String path = "f:/images2";
 						int index = 0;
 						List<String> nolist = new ArrayList<>();
-							
+							YunSpider spider = new YunSpider();
 							try {
 								while ((line = br.readLine()) != null) {  
 									index++;
@@ -53,14 +54,20 @@ public class DownloadPic {
 										try {
 											WXEntity en = new Gson().fromJson(line, WXEntity.class);
 											FileUtil.downloadFile(en.getAvatar(), MD5Util.MD5(en.getAvatar()) + ".jpg", path);
+//											try {
+//												new CwqDB().insertWX(account, en.getAvatar(), MD5Util.MD5(en.getAvatar()));
+//											} catch (SQLException e) {
+//												e.printStackTrace();
+//											}
+										} catch (IOException e1) {
+											WXEntity en = new Gson().fromJson(line, WXEntity.class);
 											try {
-												new CwqDB().insertWX(account, en.getAvatar(), MD5Util.MD5(en.getAvatar()));
+												spider.insertNoAvatarInfo(en.getAccount());
 											} catch (SQLException e) {
+												// TODO Auto-generated catch block
 												e.printStackTrace();
 											}
-										} catch (IOException e1) {
 											nolist.add(line);
-											
 										}	 
 										
 									}

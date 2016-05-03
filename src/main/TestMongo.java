@@ -33,10 +33,10 @@ import db.BaseMonGoDB;
 
 public class TestMongo {
 
-	public static final String last_name = "1189";
-	public static final String PATH_NOACCOUNT = SFileUtil.getDataFile("noaccount3.txt");
-	public static final String PATH_WEIXINID = SFileUtil.getDataFile("weixin.txt");
-	public static final String PATH_AVATAR = SFileUtil.getDataFile("avatar3.txt");
+	public static final String last_name = "138";
+	public static final String PATH_NOACCOUNT = SFileUtil.getDataFile("noaccount.txt");
+	public static final String PATH_WEIXINID = SFileUtil.getDataFile("weixin_all.txt");
+	public static final String PATH_AVATAR = SFileUtil.getDataFile("avatar.txt");
 	private static boolean isrun = false;
 	private static int index = 0;
 	private static List<String> list_unknow = new ArrayList<>();
@@ -86,6 +86,7 @@ public class TestMongo {
 //								if(line.trim().equals(last_name)) {
 //									 isrun = true;
 //								}
+								
 								if(index == Integer.valueOf(last_name)) {
 									isrun = true;
 								}
@@ -93,6 +94,7 @@ public class TestMongo {
 									long start_time = System.currentTimeMillis();
 									try {
 										  System.out.print("正在" + index + "行数据:" + line + "; ");
+										  
 										  	WXEntity en = new WXhelper().getUrlbyAccount(line.trim(), list);
 										  	FileUtil.writeText2File(PATH_AVATAR, line + "|" + en.toString());
 //											JSONObject json = new WXhelper().getSearchList(line.trim(), list);

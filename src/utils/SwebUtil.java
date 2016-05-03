@@ -28,6 +28,9 @@ public class SwebUtil {
 	}
 	
 	public String doPortGet(String url) throws IOException {
+		if(hostlist == null) {
+			return doPortGet(url, "", 123);
+		}
 		int index = new Random().nextInt(hostlist.size() - 1);
 		return doPortGet(url, hostlist.get(index).getHostName(), hostlist.get(index).getPort());
 	}

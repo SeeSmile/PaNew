@@ -30,9 +30,9 @@ import utils.SwebUtil;
 import utils.WebUtil;
 public class WXhelper {
 	
-	private static final String KEY_INTRODUCE = "¹¦ÄÜ½éÉÜ";
-	private static final String KEY_ATT = "ÈÏÖ¤";
-	private static final String KEY_NEWS = "×î½üÎÄÕÂ";
+	private static final String KEY_INTRODUCE = "ï¿½ï¿½ï¿½Ü½ï¿½ï¿½ï¿½";
+	private static final String KEY_ATT = "ï¿½ï¿½Ö¤";
+	private static final String KEY_NEWS = "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½";
 	
 	private static final String URL_GO = "http://weixin.sogou.com/antispider/thank.php";
 	private static final String URL_IMG = "http://weixin.sogou.com/antispider/";
@@ -86,10 +86,25 @@ public class WXhelper {
 		return json;
 	}
 	
+	public JSONObject getSearchList2(String account, JSONObject json) throws IOException, FibdException, AccountErrorException {
+		mutil = new SwebUtil(null);
+	
+		try {
+			
+			JSONArray array =  getNewsByUrl(json.optString("url"));
+			json.put("avatar", avatar);
+			json.put("news", array);
+			json.put("sid", file_id);
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		return json;
+	}
+	
 	/**
-	 * ¸ù¾İÎÄÕÂÁ´½ÓµÃµ½»ñÈ¡ÎÄÕÂµãÔŞ£¬ÔÄ¶ÁÊıµÈĞÅÏ¢µÄÆ´½Ó
-	 * @param url µ¥¶ÀÎÄÕÂµÄÁ´½Ó
-	 * @return JSON ¸ñÊ½µÄ×Ö·û´®
+	 * ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÓµÃµï¿½ï¿½ï¿½È¡ï¿½ï¿½ï¿½Âµï¿½ï¿½Ş£ï¿½ï¿½Ä¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢ï¿½ï¿½Æ´ï¿½ï¿½
+	 * @param url ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Âµï¿½ï¿½ï¿½ï¿½ï¿½
+	 * @return JSON ï¿½ï¿½Ê½ï¿½ï¿½ï¿½Ö·ï¿½
 	 */
 	public static String replaceUrl(String url) {
 		String[] tx = url.split("\"content_url\":");
@@ -106,11 +121,10 @@ public class WXhelper {
 	public static WXEntity getUrlbyAccount(String account, List<HttpHost> list) throws IOException, FibdException, AccountErrorException {
 		
 		mutil = new SwebUtil(list);
-		//µ÷ÓÃËÑ¹·ËÑË÷ÏàÓ¦µÄÎ¢ĞÅºÅ
 		String mainurl = URL_SEARCH + PARAM_SEARCH + "&query=" + account;
 		Random rand = new Random();
 		int x = rand.nextInt(10);
-		System.out.print(" »ñÈ¡Ö÷ÕËºÅĞÅÏ¢;");
+	
 		Document doc;
 //		if(x % 3 == 0) {
 //			String html = "";
@@ -142,12 +156,11 @@ public class WXhelper {
 		Elements eles = doc.getElementsByClass("weixin-public");
 		if(eles.size() == 0) {
 //			String img = URL_IMG + doc.getElementsByClass("s1").get(1).select("img[src]").attr("src").toString();
-			throw new FibdException("Í¼Æ¬µØÖ·", doc.text());
+			throw new FibdException(account, doc.text());
 		}
 		Element ele = eles.get(0);
 		WXEntity entity = new WXEntity();
 		boolean first = true;
-		//»ñÈ¡¶şÎ¬ÂëºÍÍ·Ïñ
 		for(Element e : ele.getElementsByClass("pos-ico").select("img[src]")) {
 			if(first) {
 				entity.setAvatar(e.attr("src"));
@@ -156,7 +169,6 @@ public class WXhelper {
 				entity.setQrcode(e.attr("src"));
 			}
 		}
-//		System.out.println("ele:" + ele.getElementsByTag("div"));
 		if(ele.select("div[href]").size() == 0) {
 			throw new AccountErrorException(account);
 		}
@@ -172,10 +184,10 @@ public class WXhelper {
 			} else if(e.text().startsWith(KEY_INTRODUCE)) {
 				entity.setIntroduce(e.text().substring(KEY_INTRODUCE.length() + 1));
 			} else if(e.text().startsWith(KEY_NEWS)) {
-				//×îĞÂ×ÊÑ¶
+				//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ñ¶
 				//System.out.println("news:" + e.text().substring(KEY_NEWS.length() + 1));
 			} else {
-				System.out.println("else:" + e.text());
+//				System.out.println("else:" + e.text());
 			}
 		}
 		entity.setUrl(url);
@@ -190,9 +202,9 @@ public class WXhelper {
 		Document doc2;
 		String html = "";
 		String result = "";
-		System.out.print(" ¿ªÊ¼»ñÈ¡ĞÂÎÅ;");
+		System.out.print(" è·å–æ–°é—»;");
 //		if(x % 3 == 0) {
-//			//»ñÈ¡µÚÒ»ÌõÎ¢ĞÅ¹«ÖÚºÅµÄÖ÷Ò³
+//			//ï¿½ï¿½È¡ï¿½ï¿½Ò»ï¿½ï¿½Î¢ï¿½Å¹ï¿½ï¿½ÚºÅµï¿½ï¿½ï¿½Ò³
 //			doc2 = Jsoup.connect(url)
 //					.userAgent("Mozilla")
 //					.cookie("auth", "token")
@@ -223,9 +235,7 @@ public class WXhelper {
 		
 		result = doc2.toString();
 		avatar = doc2.getElementsByClass("radius_avatar").get(0).getElementsByTag("img").get(0).attr("src");
-		//½ØÈ¡×Ö·û´®£¬ÌáÈ¡ÎÄÕÂÁĞ±íµÄÁ´½Ó
 		int p = result.indexOf("msgList");
-		//Êı¾İÇåÏ´£¬È¥³ı¶àÓàµÄ×Ö·û´®
 		String text_json = result.substring(p)
 				.replaceAll("&quot;", "\"")
 				.replaceAll("amp;", "")
@@ -255,7 +265,9 @@ public class WXhelper {
 							
 					String jsontext = "";
 					try {
-						jsontext = mutil.doPortGet(getReadUrl(contenturl));
+						System.out.println("readurl:" + getReadUrl(contenturl));
+						jsontext = WebUtil.sendGET(getReadUrl(contenturl));
+						System.out.println("jsontext:" + jsontext);
 						SoGouWX swx = new Gson().fromJson(jsontext, SoGouWX.class);
 						swx.setTime(time);
 						swx.setUrl(getHtmlUrl(contenturl));
@@ -265,7 +277,7 @@ public class WXhelper {
 						swx.setType(SoGouWX.TYPE_TOP);
 						dataArray.put(new JSONObject(swx.toString()));
 					} catch (StringIndexOutOfBoundsException e1) {
-						System.out.print("  µ¥Í¼ÎÄÍ·Ìõ²»´æÔÚ;");
+						System.out.print("  ä¸»ä¿¡æ¯å¼‚å¸¸;");
 					}
 					if(wx.getApp_msg_ext_info().getIs_multi() == 1) {
 						List<MultiAppMsgItemListEntity> list = wx.getApp_msg_ext_info().getMulti_app_msg_item_list();
@@ -274,8 +286,9 @@ public class WXhelper {
 							String itemurl = "";
 							try {
 								itemurl = WebUtil.sendGET(getReadUrl(entity.getContent_url()));
+								System.out.println("itemurl:" + itemurl);
 							} catch (Exception e) {
-								System.out.println("3-nÌõ±¨´í£º\n" + entity.toString());
+								System.out.println("3-nå¼‚å¸¸\n" + entity.toString());
 							}
 							SoGouWX mwx = new Gson().fromJson(itemurl, SoGouWX.class);
 							mwx.setTime(time);
@@ -291,12 +304,7 @@ public class WXhelper {
 								mwx.setType(SoGouWX.TYPE_OTHER);
 							}
 							dataArray.put(new JSONObject(mwx.toString()));
-//							try {
-//								Thread.sleep((long) (800 * (rand.nextDouble() + 0.1)));
-//							} catch (InterruptedException e) {
-//								// TODO Auto-generated catch block
-//								e.printStackTrace();
-//							}
+							
 						}
 					}
 				} catch (JsonSyntaxException e) {
@@ -307,7 +315,7 @@ public class WXhelper {
 					e.printStackTrace();
 				}
 //				try {
-//					Thread.sleep((long) (700 * (rand.nextDouble() + 0.1)));
+//					Thread.sleep(500);
 //				} catch (InterruptedException e) {
 //					// TODO Auto-generated catch block
 //					e.printStackTrace();
@@ -321,6 +329,7 @@ public class WXhelper {
 	
 	private String getReadUrl (String url) throws StringIndexOutOfBoundsException{
 		int postion = url.indexOf("?");
+//		System.out.println(URL_HEAD + URL_REPLACE_ONE + url.substring(postion, url.length() - 1) + URL_REPLACE_TWO);
 		return URL_HEAD + URL_REPLACE_ONE + url.substring(postion, url.length() - 1) + URL_REPLACE_TWO;
 	}
 	

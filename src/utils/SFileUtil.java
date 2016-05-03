@@ -136,6 +136,9 @@ public class SFileUtil {
 		if(text.indexOf("¹ú") != -1) {
 			return "";
 		}
+		if(text.indexOf("?") != -1) {
+			return "";
+		}
 		String t;
 		Pattern p = Pattern.compile("\\s*");
 		Matcher m = p.matcher(text.trim());

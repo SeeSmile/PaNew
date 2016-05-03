@@ -69,4 +69,15 @@ public class YunSpider extends BaseDB {
 		pst.setString(2, account);
 		pst.execute();
 	}
+	
+	public String getInfoByAccount(String account) throws SQLException {
+		String sql = "select * from " + TABLE_WEIXIN + " where account=?";
+		PreparedStatement pst = getPrepared(sql);
+		pst.setString(1, account);
+		ResultSet result = pst.executeQuery();
+		if(result.next()) {
+			return result.getString("info");
+		}
+		return null;
+	}
 }

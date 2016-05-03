@@ -216,7 +216,7 @@ public class CwqDB extends BaseDB{
 		list.add(new DbParams("weixin_account", account));
 		list.add(new DbParams("avatar", avatar));
 		list.add(new DbParams("new_avatar", "Public/wxpic/" + url + ".jpg"));
-		String sql = createInsertSql("wlf_weixin_media_temp", list);
+		String sql = createInsertSql("wlf_weixin_media_temp_2", list);
 		PreparedStatement state = getPrepared(sql);
 		initPst(state, list);
 		state.execute();

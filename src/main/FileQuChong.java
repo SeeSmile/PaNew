@@ -8,6 +8,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 
 import data.WXEntity;
+import data.WxNews;
 import db.YunSpider;
 
 import utils.SFileUtil;
@@ -19,24 +20,22 @@ public class FileQuChong {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		
 		quChong();
 	}
 	
 	public static void quChong() {
-		File oldFile = SFileUtil.createDataFile("weixin_id.txt");
-		File newFile = new File(SFileUtil.getDataFile("noa.txt"));
+		File oldFile = SFileUtil.createDataFile("noa.txt");
+		File newFile = new File(SFileUtil.getDataFile("noa2.txt"));
 		try {
 			SFileUtil.lookChong(oldFile, newFile);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 	
 	public static void insertWX() throws IOException {
 		final YunSpider db = new YunSpider();
-		SFileUtil.readFileLine(SFileUtil.createDataFile("noa.txt"), new ReadListener() {
+		SFileUtil.readFileLine(SFileUtil.createDataFile("avatar.txt"), new ReadListener() {
 			
 			@Override
 			public void onRead(int index, String text) {
@@ -46,7 +45,7 @@ public class FileQuChong {
 				if(text.length() > 0) {
 					try {
 						System.out.println("account:" + text);
-						db.insertNoAccountInfo(text);
+						db.insertInfo(new Gson().fromJson(text, WXEntity.class));
 					} catch (JsonSyntaxException e) {
 						e.printStackTrace();
 					} catch (SQLException e) {

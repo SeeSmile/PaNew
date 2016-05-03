@@ -32,7 +32,7 @@ public class SwebUtil {
 		return doPortGet(url, hostlist.get(index).getHostName(), hostlist.get(index).getPort());
 	}
 	
-	private String doPortGet(String surl, String ip, int port) throws IOException {
+	public String doPortGet(String surl, String ip, int port) throws IOException {
 		URL url = new URL(surl);
 		URI uri = null;
 		try {
@@ -47,6 +47,8 @@ public class SwebUtil {
 	     RequestConfig config = RequestConfig.custom().setProxy(proxy).build();  
 	     HttpGet httpGet = new HttpGet(uri);  
 //	     httpGet.setConfig(config);  
+	     System.setProperty("http.proxyHost", ip);  
+	     System.setProperty("http.proxyPort", port + ""); 
          httpGet.addHeader("User-Agent", "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1;SV1)");
         CloseableHttpResponse httpResponse = null;
 		try{

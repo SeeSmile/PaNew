@@ -23,6 +23,7 @@ import helper.WXhelper;
 import utils.AccountErrorException;
 import utils.FibdException;
 import utils.FileUtil;
+import utils.SFileUtil;
 import utils.WebUtil;
 
 import com.mongodb.BasicDBObject;
@@ -32,8 +33,10 @@ import db.BaseMonGoDB;
 
 public class TestMongo {
 
-	public static final String last_name = "524";
-	public static final String PATH_NOACCOUNT = "c:/noaccount2.txt";
+	public static final String last_name = "1189";
+	public static final String PATH_NOACCOUNT = SFileUtil.getDataFile("noaccount3.txt");
+	public static final String PATH_WEIXINID = SFileUtil.getDataFile("weixin.txt");
+	public static final String PATH_AVATAR = SFileUtil.getDataFile("avatar3.txt");
 	private static boolean isrun = false;
 	private static int index = 0;
 	private static List<String> list_unknow = new ArrayList<>();
@@ -68,7 +71,7 @@ public class TestMongo {
 	public static void start(final List<HttpHost> list) {
 		FileInputStream fis;
 		try {
-			fis = new FileInputStream(new File("c:/avatar2.txt"));
+			fis = new FileInputStream(new File(PATH_WEIXINID));
 			InputStreamReader isr = new InputStreamReader(fis, "UTF-8");   
 			  final BufferedReader br = new BufferedReader(isr);   
 				  new Thread(new Runnable() {
@@ -87,16 +90,11 @@ public class TestMongo {
 									isrun = true;
 								}
 								if(isrun && line.length() > 0) {
-									String text = "";
 									long start_time = System.currentTimeMillis();
-									Pattern p = Pattern.compile("\\s*");
-									Matcher m = p.matcher(line);
-									text = m.replaceAll("");
-									text = line.replaceAll(" ", "");
 									try {
-										  System.out.print("正在" + index + "行数据:" + text + "; ");
-										  	WXEntity en = new WXhelper().getUrlbyAccount(text.trim(), list);
-										  	FileUtil.writeText2File("c:/weixin2.txt", line + "|" + en.getAvatar());
+										  System.out.print("正在" + index + "行数据:" + line + "; ");
+										  	WXEntity en = new WXhelper().getUrlbyAccount(line.trim(), list);
+										  	FileUtil.writeText2File(PATH_AVATAR, line + "|" + en.toString());
 //											JSONObject json = new WXhelper().getSearchList(line.trim(), list);
 //											Document doc_main = new Document();
 //											doc_main.putAll(BasicDBObject.parse(json.toString()));
@@ -114,9 +112,7 @@ public class TestMongo {
 											e.showError();
 										} finally {
 											try {
-												
-												
-												Thread.sleep(new Random().nextInt(8) * 1000);
+												Thread.sleep(8 * 1000);
 												System.out.println(" 耗时: " + (System.currentTimeMillis() - start_time) / 1000 + "秒");
 											} catch (InterruptedException e) {
 												e.printStackTrace();

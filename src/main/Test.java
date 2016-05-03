@@ -6,17 +6,25 @@ import java.sql.SQLException;
 import java.util.List;
 
 import org.apache.http.HttpHost;
+import org.eclipse.jetty.util.thread.SpinLock;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
+
+import data.WXEntity;
 import db.BaseMonGoDB;
 import db.Web360DB;
+import db.YunSpider;
 
 import ui.WXJpanel;
 import utils.AccountErrorException;
 import utils.FibdException;
 import utils.FileUtil;
 import utils.SFileUtil;
+import utils.SFileUtil.ReadListener;
+import utils.SwebUtil;
 import utils.WebUtil;
 
 import helper.AgencyHelper;
@@ -28,37 +36,40 @@ public class Test {
 
 	/**
 	 * @param args
+	 * @throws IOException 
 	 */
-	public static void main(String[] args) {
-		try {
-			new Test().run();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+	public static void main(String[] args) throws IOException {
+		
 	}
-
-	public void run() throws IOException {
-		final File file = new File("d:/newfile2.txt");
-		if(!file.exists()) {
-			file.createNewFile();
-		}
-		SFileUtil.readFileLine(new File("c:/avatar2.txt"), new SFileUtil.ReadListener() {
+	
+	public static void findDb() throws IOException {
+		final YunSpider db = new YunSpider();
+		SFileUtil.readFileLine(SFileUtil.createDataFile("weixin_id.txt"), new ReadListener() {
 			
 			@Override
 			public void onRead(int index, String text) {
-				System.out.println("index = " + index + ", text = " + text);
-				String url = "http://weixin.sogou.com/weixin?type=1&query=" + text;
-				FileUtil.writeText2File(file.getAbsolutePath(), url);
+				try {
+					text = SFileUtil.trim(text);
+					if(text.length() > 0) {
+						int state = db.getStateByAccount(text);
+						if(state == 4) {
+							System.out.println(text);
+						}
+					}
+					
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
 			}
 			
 			@Override
 			public void onFinish() {
-				System.out.println("onFinish");
+				
 			}
 			
 			@Override
 			public void onFail() {
-				System.out.println("onFail");
+				
 			}
 		});
 	}

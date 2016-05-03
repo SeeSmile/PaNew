@@ -211,11 +211,12 @@ public class CwqDB extends BaseDB{
 		is.close();
 	}
 	
-	public void insertWX(String account, String url) throws SQLException {
+	public void insertWX(String account, String avatar, String url) throws SQLException {
 		ArrayList<DbParams> list = new ArrayList<DbParams>();
-		list.add(new DbParams("account", account));
-		list.add(new DbParams("url", "Public/wxpic/" + url));
-		String sql = createInsertSql("image_wx", list);
+		list.add(new DbParams("weixin_account", account));
+		list.add(new DbParams("avatar", avatar));
+		list.add(new DbParams("new_avatar", "Public/wxpic/" + url + ".jpg"));
+		String sql = createInsertSql("wlf_weixin_media_temp", list);
 		PreparedStatement state = getPrepared(sql);
 		initPst(state, list);
 		state.execute();

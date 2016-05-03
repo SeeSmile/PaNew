@@ -5,6 +5,10 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class SFileUtil {
 	
@@ -44,4 +48,99 @@ public class SFileUtil {
 		public void onFail();
 	}
 	
+	private static String getRootFile() {
+		return new File("").getAbsolutePath();
+	}
+	
+	public static String getProFile(String name) {
+		return new File(getRootFile(), name).getAbsolutePath();
+	}
+	
+	public static String getDataFile(String name) {
+		File file = new File(getProFile("data"), name);
+		if(!file.exists()) {
+			file.getParentFile().mkdirs();
+			try {
+				file.createNewFile();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		return file.getAbsolutePath();
+	}
+	
+	public static void lookChong(File file) throws IOException {
+		final List<String> list = new ArrayList<>();
+		final List<String> list_chong = new ArrayList<>();
+		readFileLine(file, new ReadListener() {
+			
+			@Override
+			public void onRead(int index, String text) {
+				if(trim(text).length() > 0) {
+					if(!list.contains(text)) {
+						list.add(text);
+					} else {
+						list_chong.add(text);
+					}
+				}
+			}
+			
+			@Override
+			public void onFinish() {
+				System.out.println("一共有" + list.size());
+				System.out.println("重复" + list_chong.size());
+			}
+			
+			@Override
+			public void onFail() {
+				
+			}
+		});
+	}
+	
+	public static void lookChong(File file, final File newFile) throws IOException {
+		final List<String> list = new ArrayList<>();
+		final List<String> list_chong = new ArrayList<>();
+		readFileLine(file, new ReadListener() {
+			
+			@Override
+			public void onRead(int index, String text) {
+				if(trim(text).length() > 0) {
+					if(!list.contains(text)) {
+						list.add(text);
+						FileUtil.writeText2File(newFile.getAbsolutePath(), text);
+					} else {
+						list_chong.add(text);
+					}
+				}
+			}
+			
+			@Override
+			public void onFinish() {
+				System.out.println("一共有" + list.size());
+				System.out.println("重复" + list_chong.size());
+			}
+			
+			@Override
+			public void onFail() {
+				
+			}
+		});
+	}
+	
+	public static File createDataFile(String path) {
+		return new File(getDataFile(path));
+	}
+	
+	public static String trim(String text) {
+		if(text.indexOf("国") != -1) {
+			return "";
+		}
+		String t;
+		Pattern p = Pattern.compile("\\s*");
+		Matcher m = p.matcher(text.trim());
+		t = m.replaceAll("");
+		t = t.replaceAll(" ", "");
+		return t;
+	}
 }

@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.List;
 import java.util.Random;
 
@@ -21,44 +22,19 @@ import org.apache.http.impl.client.HttpClients;
 
 public class SwebUtil {
 	
-	private List<HttpHost> hostlist;
 	
-	public SwebUtil(List<HttpHost> list) {
-		this.hostlist = list;
-	}
-	
-	public String doPortGet(String url) throws IOException {
-		if(hostlist == null) {
-			return doPortGet(url, "", 123);
-		}
-		int index = new Random().nextInt(hostlist.size() - 1);
-		return doPortGet(url, hostlist.get(index).getHostName(), hostlist.get(index).getPort());
-	}
-	
-	public String doPortGet(String surl, String ip, int port) throws IOException {
-		URL url = new URL(surl);
-		URI uri = null;
-		try {
-			uri = new URI(url.getProtocol(), url.getHost(), url.getPath(), url.getQuery(), null);
-		} catch (URISyntaxException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+	public String doPortGet(String surl) throws IOException, URISyntaxException {
 		RequestConfig requestConfig = RequestConfig.custom().setCookieSpec(CookieSpecs.STANDARD_STRICT).build();
 		CloseableHttpClient httpClient = HttpClients.custom().setDefaultRequestConfig(requestConfig).build();
-		 HttpHost proxy = new HttpHost(ip, port, "http");  
-	     RequestConfig config = RequestConfig.custom().setProxy(proxy).build();  
-	     HttpGet httpGet = new HttpGet(uri);  
-//	     httpGet.setConfig(config);  
-	     System.setProperty("http.proxyHost", ip);  
-	     System.setProperty("http.proxyPort", port + ""); 
+	     HttpGet httpGet = null;
+		try {
+			httpGet = new HttpGet(surl);
+		} catch (Exception e) {
+			throw new URISyntaxException("", "");
+		}  
          httpGet.addHeader("User-Agent", "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1;SV1)");
         CloseableHttpResponse httpResponse = null;
-		try{
-			httpResponse = httpClient.execute(httpGet);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		httpResponse = httpClient.execute(httpGet);
         BufferedReader reader = new BufferedReader(new InputStreamReader(
                 httpResponse.getEntity().getContent(), "utf-8"));
         String inputLine;

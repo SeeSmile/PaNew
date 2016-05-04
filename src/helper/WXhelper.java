@@ -1,6 +1,7 @@
 package helper;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -69,8 +70,8 @@ public class WXhelper {
 		System.out.println("doc:" + doc.toString());
 	}
 
-	public JSONObject getSearchList(String account, List<HttpHost> list) throws IOException, FibdException, AccountErrorException {
-		mutil = new SwebUtil(list);
+	public JSONObject getSearchList(String account, List<HttpHost> list) throws IOException, FibdException, AccountErrorException, URISyntaxException {
+		mutil = new SwebUtil();
 		WXEntity entity = getUrlbyAccount(account, null);
 		JSONObject json = null;
 		try {
@@ -86,8 +87,8 @@ public class WXhelper {
 		return json;
 	}
 	
-	public JSONObject getSearchList2(String account, JSONObject json) throws IOException, FibdException, AccountErrorException {
-		mutil = new SwebUtil(null);
+	public JSONObject getSearchList2(String account, JSONObject json) throws IOException, FibdException, AccountErrorException, URISyntaxException {
+		mutil = new SwebUtil();
 	
 		try {
 			
@@ -118,44 +119,13 @@ public class WXhelper {
 		return URL_SEARCH + PARAM_SEARCH + "&query=" + account;
 	}
 	
-	public static WXEntity getUrlbyAccount(String account, List<HttpHost> list) throws IOException, FibdException, AccountErrorException {
+	public static WXEntity getUrlbyAccount(String account, List<HttpHost> list) throws IOException, FibdException, AccountErrorException, URISyntaxException {
 		
-		mutil = new SwebUtil(list);
+		mutil = new SwebUtil();
 		String mainurl = URL_SEARCH + PARAM_SEARCH + "&query=" + account;
-		Random rand = new Random();
-		int x = rand.nextInt(10);
-	
-		Document doc;
-//		if(x % 3 == 0) {
-//			String html = "";
-//			try {
-//				html = WebUtil.sendGET(mainurl);
-//			} catch (Exception e1) {
-//				// TODO Auto-generated catch block
-//				e1.printStackTrace();
-//			}
-//			doc = Jsoup.parse(html);
-//		} else if(x % 3 == 1) {
-//			String html = "";
-//			try {
-//				html = WebUtil.getHttpContent(mainurl);
-//			} catch (Exception e1) {
-//				
-//				e1.printStackTrace();
-//			}
-//			doc = Jsoup.parse(html);
-//		} else {
-//			doc = Jsoup.connect(mainurl)
-//					.userAgent("Mozilla")
-//					.cookie("auth", "token")
-//					.timeout(5000)
-//					.get();
-//		}
-		doc = Jsoup.parse(mutil.doPortGet(mainurl));
-			
+		Document doc = Jsoup.parse(mutil.doPortGet(mainurl));
 		Elements eles = doc.getElementsByClass("weixin-public");
 		if(eles.size() == 0) {
-//			String img = URL_IMG + doc.getElementsByClass("s1").get(1).select("img[src]").attr("src").toString();
 			throw new FibdException(account, doc.text());
 		}
 		Element ele = eles.get(0);
@@ -196,7 +166,7 @@ public class WXhelper {
 		return entity;
 	}
 	
-	private JSONArray getNewsByUrl(String url) throws IOException {
+	private JSONArray getNewsByUrl(String url) throws IOException, URISyntaxException {
 		Random rand = new Random();
 		int x = rand.nextInt(10);
 		Document doc2;

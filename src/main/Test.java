@@ -1,6 +1,7 @@
 package main;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -94,6 +95,9 @@ public class Test {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					} catch (AccountErrorException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (URISyntaxException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}

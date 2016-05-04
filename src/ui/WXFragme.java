@@ -13,6 +13,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
+import java.net.URISyntaxException;
 
 import javax.swing.ImageIcon;
 
@@ -142,7 +143,7 @@ public class WXFragme extends javax.swing.JFrame {
 								if(isrun) {
 									try {
 										currentname = line.trim();
-										    tv_result.setText("正在获取:" + line.trim());
+										    tv_result.setText("锟斤拷锟节伙拷取:" + line.trim());
 											JSONObject json = new WXhelper().getSearchList(line.trim(), null);
 											Document doc_main = new Document();
 											doc_main.put("account", BasicDBObject.parse(json.toString()));
@@ -160,6 +161,9 @@ public class WXFragme extends javax.swing.JFrame {
 												e1.printStackTrace();
 											}
 										} catch (AccountErrorException e) {
+											// TODO Auto-generated catch block
+											e.printStackTrace();
+										} catch (URISyntaxException e) {
 											// TODO Auto-generated catch block
 											e.printStackTrace();
 										} finally {

@@ -36,8 +36,10 @@ import org.apache.http.entity.mime.Header;
 import org.apache.http.impl.client.AbstractHttpClient;
 import org.apache.http.impl.client.BasicCookieStore;
 import org.apache.http.impl.cookie.BasicClientCookie;
+import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.ExecutionContext;
+import org.eclipse.jetty.util.log.Slf4jLog;
 import org.jsoup.Jsoup;
 
 
@@ -68,10 +70,10 @@ public class WebUtil {
 		}
 //        httpResponse.getEntity().getContent()
 //        HttpHost targetHost = (HttpHost)context.getAttribute(ExecutionContext.HTTP_TARGET_HOST);
-        //»ñÈ¡Êµ¼ÊµÄÇëÇó¶ÔÏóµÄURI,¼´ÖØ¶¨ÏòÖ®ºóµÄ"/blog/admin/login.jsp"
+        //ï¿½ï¿½È¡Êµï¿½Êµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½URI,ï¿½ï¿½ï¿½Ø¶ï¿½ï¿½ï¿½Ö®ï¿½ï¿½ï¿½"/blog/admin/login.jsp"
 //        HttpUriRequest realRequest = (HttpUriRequest)context.getAttribute(ExecutionContext.HTTP_REQUEST);
-//        System.out.println("Ö÷»úµØÖ·:" + targetHost);
-//        System.out.println("URIĞÅÏ¢:" + realRequest.getURI());
+//        System.out.println("ï¿½ï¿½ï¿½ï¿½ï¿½Ö·:" + targetHost);
+//        System.out.println("URIï¿½ï¿½Ï¢:" + realRequest.getURI());
         BufferedReader reader = new BufferedReader(new InputStreamReader(
                 httpResponse.getEntity().getContent(), "utf-8"));
         String inputLine;
@@ -107,23 +109,23 @@ public class WebUtil {
     	HttpGet httpGet = new HttpGet(url);
         httpGet.addHeader("User-Agent", "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1;SV1)");
         CloseableHttpResponse httpResponse = getClient().execute(httpGet);
-        // ÊäÈëÁ÷  
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½  
  		InputStream is = httpResponse.getEntity().getContent();
- 		// 1KµÄÊı¾İ»º³å  
+ 		// 1Kï¿½ï¿½ï¿½ï¿½İ»ï¿½ï¿½ï¿½  
  		byte[] bs = new byte[1024];
- 		// ¶ÁÈ¡µ½µÄÊı¾İ³¤¶È  
+ 		// ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½İ³ï¿½ï¿½ï¿½  
  		int len;
- 		// Êä³öµÄÎÄ¼şÁ÷  
+ 		// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½  
  		File sf = new File(savePath);
  		if (!sf.exists()) {
  			sf.mkdirs();
  		}
  		OutputStream os = new FileOutputStream(sf.getPath() + "\\" + filename);
- 		// ¿ªÊ¼¶ÁÈ¡  
+ 		// ï¿½ï¿½Ê¼ï¿½ï¿½È¡  
  		while ((len = is.read(bs)) != -1) {
  			os.write(bs, 0, len);
  		}
- 		// Íê±Ï£¬¹Ø±ÕËùÓĞÁ´½Ó  
+ 		// ï¿½ï¿½Ï£ï¿½ï¿½Ø±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½  
  		os.close();
  		is.close();
     }
@@ -151,14 +153,14 @@ public class WebUtil {
             URL address_url = new URL(url);
             connection = (HttpURLConnection) address_url.openConnection();
 //            connection.setRequestMethod("GET");
-            //ÉèÖÃ·ÃÎÊ³¬Ê±Ê±¼ä¼°¶ÁÈ¡ÍøÒ³Á÷µÄ³¬ÊĞÊ±¼ä,ºÁÃëÖµ
+            //ï¿½ï¿½ï¿½Ã·ï¿½ï¿½Ê³ï¿½Ê±Ê±ï¿½ä¼°ï¿½ï¿½È¡ï¿½ï¿½Ò³ï¿½ï¿½ï¿½Ä³ï¿½ï¿½ï¿½Ê±ï¿½ï¿½,ï¿½ï¿½ï¿½ï¿½Öµ
             System.setProperty("sun.net.client.defaultConnectTimeout","30000");
             System.setProperty("sun.net.client.defaultReadTimeout", "30000");
 
             //after JDK 1.5
 //            connection.setConnectTimeout(10000);
 //            connection.setReadTimeout(10000);
-            //µÃµ½·ÃÎÊÒ³ÃæµÄ·µ»ØÖµ
+            //ï¿½Ãµï¿½ï¿½ï¿½ï¿½ï¿½Ò³ï¿½ï¿½Ä·ï¿½ï¿½ï¿½Öµ
             int response_code = connection.getResponseCode();
             if (response_code == HttpURLConnection.HTTP_OK) {
                 InputStream in = connection.getInputStream();
@@ -266,6 +268,60 @@ public class WebUtil {
     	}
     	
     }
+
+    public static void restart2() throws Exception {
+    	String result = sendGET("http://192.168.1.1");
+    	String str1 = "getElementById(\"Frm_Logintoken\").value = \"";
+    	
+    	int postion = result.indexOf(str1);
+    	result = result.substring(postion + str1.length());
+    	int postion2 = result.indexOf(";");
+    	String token = result.substring(0, postion2 - 1);
+    	System.out.println("token:" + token);
+    	List<NameValuePair> param = new ArrayList<>();
+        param.add(new BasicNameValuePair("Username", "useradmin"));
+ 		param.add(new BasicNameValuePair("Password", "123456"));
+ 		param.add(new BasicNameValuePair("Frm_Logintoken", token));
+    	sendPOST("http://192.168.1.1", param);
+    	List<NameValuePair> param2 = new ArrayList<>();
+		param2.add(new BasicNameValuePair("IF_ACTION", "devrestart"));
+		param2.add(new BasicNameValuePair("IF_ERRORPARAM", "SUCC"));
+		param2.add(new BasicNameValuePair("IF_ERRORSTR", "SUCC"));
+		param2.add(new BasicNameValuePair("IF_ERRORTYPE", "-1"));
+		param2.add(new BasicNameValuePair("flag", "1"));
+		String url2 = "http://192.168.1.1/getpage.gch?pid=1002&nextpage=manager_dev_conf_t.gch";
+    	sendPOST(url2, param2);
+    }
     
-    
+    public static boolean pingIP() {
+		Runtime runtime = Runtime.getRuntime(); // è·å–å½“å‰ç¨‹åºçš„è¿è¡Œè¿›å¯¹è±¡
+		  Process process = null; // å£°æ˜å¤„ç†ç±»å¯¹è±¡
+		  String line = null; // è¿”å›è¡Œä¿¡æ¯
+		  InputStream is = null; // è¾“å…¥æµ
+		  InputStreamReader isr = null; // å­—èŠ‚æµ
+		  BufferedReader br = null;
+		  String ip = "192.168.1.1";
+		  boolean res = false;// ç»“æœ
+		  try {
+		   process = runtime.exec("ping " + ip); // PING
+
+		   is = process.getInputStream(); // å®ä¾‹åŒ–è¾“å…¥æµ
+		   isr = new InputStreamReader(is);// æŠŠè¾“å…¥æµè½¬æ¢æˆå­—èŠ‚æµ
+		   br = new BufferedReader(isr);// ä»å­—èŠ‚ä¸­è¯»å–æ–‡æœ¬
+		   while ((line = br.readLine()) != null) {
+		    if (line.contains("TTL")) {
+		     res = true;
+		     break;
+		    }
+		   }
+		   is.close();
+		   isr.close();
+		   br.close();
+		   return res;
+		  } catch (IOException e) {
+		   System.out.println(e);
+		   runtime.exit(1);
+		  }
+		  return false;
+	}
 }

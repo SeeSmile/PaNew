@@ -12,6 +12,12 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.http.HttpHost;
+import org.bson.Document;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import com.mongodb.BasicDBObject;
+
 import helper.AgencyHelper;
 import helper.AgencyHelper.HostLoadListener;
 import helper.WXhelper;
@@ -22,6 +28,7 @@ import utils.SFileUtil;
 import utils.SFileUtil.ReadListener;
 import utils.WebUtil;
 import data.WXEntity;
+import db.BaseMonGoDB;
 
 public class TestMongo {
 
@@ -33,7 +40,7 @@ public class TestMongo {
 	private static int index = 0;
 	private static List<String> list_unknow = new ArrayList<>();
 	private static int token_index = 0;
-	public static int lastIndex = 6766;
+	public static int lastIndex = 3582;
 	
 	/**
 	 * @param args
@@ -98,10 +105,10 @@ public class TestMongo {
 										  	FileUtil.writeText2File(PATH_AVATAR, line + "|" + en.toString());
 										  	line = br.readLine();
 										  	index++;
-//											JSONObject json = new WXhelper().getSearchList(line.trim(), list);
-//											Document doc_main = new Document();
-//											doc_main.putAll(BasicDBObject.parse(json.toString()));
-//											BaseMonGoDB.getInstance().insertInfo(doc_main);
+											JSONObject json = new WXhelper().getSearchList(line.trim(), list);
+											Document doc_main = new Document();
+											doc_main.putAll(BasicDBObject.parse(json.toString()));
+											BaseMonGoDB.getInstance().insertInfo(doc_main);
 										} catch (IOException e) {
 											System.out.println("\nIOE错误");
 											e.printStackTrace();
@@ -177,6 +184,10 @@ public class TestMongo {
 					try {
 						en = WXhelper.getUrlbyAccount(text, null);
 						FileUtil.writeText2File(PATH_AVATAR, en.toString());
+						JSONObject json = new WXhelper().getSearchList2(en.getAccount(), new JSONObject(en.toString()));
+						Document doc_main = new Document();
+						doc_main.putAll(BasicDBObject.parse(json.toString()));
+						BaseMonGoDB.getInstance().insertInfo(doc_main);
 					} catch (IOException e) {
 						System.out.println("url有问题:" + e.toString());
 					} catch (FibdException e) {
@@ -188,6 +199,9 @@ public class TestMongo {
 						
 					} catch (URISyntaxException e) {
 						System.out.println("666");
+					} catch (JSONException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
 					} finally {
 						System.out.println("\n");
 						try {

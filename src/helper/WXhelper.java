@@ -96,6 +96,7 @@ public class WXhelper {
 			json.put("avatar", avatar);
 			json.put("news", array);
 			json.put("sid", file_id);
+			json.put("time", "2016-05-05 00:00:00");
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
@@ -172,35 +173,7 @@ public class WXhelper {
 		Document doc2;
 		String html = "";
 		String result = "";
-		System.out.print(" 获取新闻;");
-//		if(x % 3 == 0) {
-//			//��ȡ��һ��΢�Ź��ںŵ���ҳ
-//			doc2 = Jsoup.connect(url)
-//					.userAgent("Mozilla")
-//					.cookie("auth", "token")
-//					.timeout(7000)
-//					.get();
-//			result = doc2.toString();
-//		} else if(x % 3 == 1) {
-//			try {
-//				html = WebUtil.sendGET(url);
-//			} catch (Exception e1) {
-//				// TODO Auto-generated catch block
-//				e1.printStackTrace();
-//			}
-//			doc2 = Jsoup.parse(html);
-//			result = html;
-//		} else {
-//			try {
-//				html = WebUtil.getHttpContent(url);
-//			} catch (Exception e1) {
-//				// TODO Auto-generated catch block
-//				e1.printStackTrace();
-//			}
-//			doc2 = Jsoup.parse(html);
-//			result = html;
-//		}
-		
+
 		doc2 = Jsoup.parse(mutil.doPortGet(url));
 		
 		result = doc2.toString();
@@ -235,9 +208,7 @@ public class WXhelper {
 							
 					String jsontext = "";
 					try {
-						System.out.println("readurl:" + getReadUrl(contenturl));
 						jsontext = WebUtil.sendGET(getReadUrl(contenturl));
-						System.out.println("jsontext:" + jsontext);
 						SoGouWX swx = new Gson().fromJson(jsontext, SoGouWX.class);
 						swx.setTime(time);
 						swx.setUrl(getHtmlUrl(contenturl));
@@ -256,7 +227,6 @@ public class WXhelper {
 							String itemurl = "";
 							try {
 								itemurl = WebUtil.sendGET(getReadUrl(entity.getContent_url()));
-								System.out.println("itemurl:" + itemurl);
 							} catch (Exception e) {
 								System.out.println("3-n异常\n" + entity.toString());
 							}

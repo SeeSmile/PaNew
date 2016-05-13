@@ -32,7 +32,7 @@ public class BaseDB {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			System.out.println("Á¬½ÓÊý¾Ý¿âÊ§°Ü");
+			System.out.println("connect db failed");
 		}
 	}
 	
@@ -46,15 +46,15 @@ public class BaseDB {
 				conn = DriverManager.getConnection(uri, name, password);
 			}
 		} catch (Exception e) {
-			System.out.println("Á¬½ÓÊý¾Ý¿âÊ§°Ü");
+			System.out.println("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý¿ï¿½Ê§ï¿½ï¿½");
 		}
 	}
 	
 	/**
-	 * È¡µÃSQL²Ù×÷¶ÔÏó
-	 * @param sql ÒªÖ´ÐÐµÄSQLÓï¾ä
-	 * @return SQL²Ù×÷¶ÔÏó
-	 * @throws SQLException Ö´ÐÐSQLÓï¾äÒì³£
+	 * È¡ï¿½ï¿½SQLï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	 * @param sql ÒªÖ´ï¿½Ðµï¿½SQLï¿½ï¿½ï¿½
+	 * @return SQLï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	 * @throws SQLException Ö´ï¿½ï¿½SQLï¿½ï¿½ï¿½ï¿½ì³£
 	 */
 	public PreparedStatement getPrepared(String sql) throws SQLException {
 		connectDB();
@@ -65,7 +65,7 @@ public class BaseDB {
 	}
 	
 	/**
-	 * ¹Ø±ÕÊý¾Ý¿âÁ´½Ó
+	 * ï¿½Ø±ï¿½ï¿½ï¿½Ý¿ï¿½ï¿½ï¿½ï¿½ï¿½
 	 */
 	public void close() {
 		try {
@@ -73,7 +73,7 @@ public class BaseDB {
 				conn.close();
 			}
 		} catch (SQLException e) {
-			System.out.println("¹Ø±ÕÊý¾Ý¿âÊ§°Ü");
+			System.out.println("close error");
 		}
 	}
 	

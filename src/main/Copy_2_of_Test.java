@@ -19,7 +19,7 @@ import utils.SFileUtil;
 import utils.SFileUtil.ReadListener;
 import helper.WXhelper;
 
-public class Test {
+public class Copy_2_of_Test {
 	
 	public static List<String> list;
 
@@ -31,55 +31,15 @@ public class Test {
 		insertInfoToDB();
 	}
 	
-	public static void findDb() throws IOException {
-		final YunSpider db = new YunSpider();
-		list = new ArrayList<>();
-		SFileUtil.readFileLine(SFileUtil.createDataFile("avatar2.txt"), new ReadListener() {
-			
-			@Override
-			public void onRead(int index, String text) {
-				System.out.println("index:" + index);
-				try {
-					text = SFileUtil.trim(text);
-					if(text.length() > 0) {
-						
-						int state = db.getStateByAccount(text);
-						if(state == YunSpider.STATE_NOEXIST || state == YunSpider.STATE_NOAVATAR) {
-							list.add(text);
-						}
-					}
-					
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
-			}
-			
-			@Override
-			public void onFinish() {
-				for(String t : list) {
-					System.out.println(t);
-				}
-				System.out.println(list.size());
-			}
-			
-			@Override
-			public void onFail() {
-				
-			}
-		});
-	}
-	
 	public static void insertInfoToDB() throws IOException {
-		SFileUtil.readFileLine(SFileUtil.createDataFile("weixin(8).txt"), new SFileUtil.ReadListener() {
+		SFileUtil.readFileLine(SFileUtil.createDataFile("weixin(14).txt"), new SFileUtil.ReadListener() {
 			
 			@Override
 			public void onRead(int index, String text) {
-				System.out.println(index);
 				if(text.length() == 0) {
 					return;
 				}
-				
-				if(index > 300) {
+				if(index > 500 || index <= 393) {
 					return;
 				}
 				System.out.println("index:" + index);
@@ -95,17 +55,13 @@ public class Test {
 						doc_main.putAll(BasicDBObject.parse(json2.toString()));
 						BaseMonGoDB.getInstance().insertInfo(doc_main);
 					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+						System.out.println("io");
 					} catch (FibdException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+						System.out.println("fidb");
 					} catch (AccountErrorException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+						System.out.println("accerror");
 					} catch (URISyntaxException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+						System.out.println("uri");
 					}
 					
 				} catch (JSONException e) {

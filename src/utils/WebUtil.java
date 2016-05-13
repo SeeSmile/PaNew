@@ -65,15 +65,8 @@ public class WebUtil {
 			createClient();
 			httpResponse = getClient().execute(httpGet, context);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-//        httpResponse.getEntity().getContent()
-//        HttpHost targetHost = (HttpHost)context.getAttribute(ExecutionContext.HTTP_TARGET_HOST);
-        //��ȡʵ�ʵ���������URI,���ض���֮���"/blog/admin/login.jsp"
-//        HttpUriRequest realRequest = (HttpUriRequest)context.getAttribute(ExecutionContext.HTTP_REQUEST);
-//        System.out.println("�����ַ:" + targetHost);
-//        System.out.println("URI��Ϣ:" + realRequest.getURI());
         BufferedReader reader = new BufferedReader(new InputStreamReader(
                 httpResponse.getEntity().getContent(), "utf-8"));
         String inputLine;
@@ -109,23 +102,17 @@ public class WebUtil {
     	HttpGet httpGet = new HttpGet(url);
         httpGet.addHeader("User-Agent", "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1;SV1)");
         CloseableHttpResponse httpResponse = getClient().execute(httpGet);
-        // ������  
  		InputStream is = httpResponse.getEntity().getContent();
- 		// 1K����ݻ���  
  		byte[] bs = new byte[1024];
- 		// ��ȡ������ݳ���  
  		int len;
- 		// ������ļ���  
  		File sf = new File(savePath);
  		if (!sf.exists()) {
  			sf.mkdirs();
  		}
  		OutputStream os = new FileOutputStream(sf.getPath() + "\\" + filename);
- 		// ��ʼ��ȡ  
  		while ((len = is.read(bs)) != -1) {
  			os.write(bs, 0, len);
  		}
- 		// ��ϣ��ر���������  
  		os.close();
  		is.close();
     }
@@ -135,7 +122,6 @@ public class WebUtil {
     		try {
 				httpClient = new SSLClient();
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
     	}
@@ -152,19 +138,11 @@ public class WebUtil {
         try {
             URL address_url = new URL(url);
             connection = (HttpURLConnection) address_url.openConnection();
-//            connection.setRequestMethod("GET");
-            //���÷��ʳ�ʱʱ�估��ȡ��ҳ���ĳ���ʱ��,����ֵ
             System.setProperty("sun.net.client.defaultConnectTimeout","30000");
             System.setProperty("sun.net.client.defaultReadTimeout", "30000");
-
-            //after JDK 1.5
-//            connection.setConnectTimeout(10000);
-//            connection.setReadTimeout(10000);
-            //�õ�����ҳ��ķ���ֵ
             int response_code = connection.getResponseCode();
             if (response_code == HttpURLConnection.HTTP_OK) {
                 InputStream in = connection.getInputStream();
-//                InputStreamReader reader = new InputStreamReader(in,charSet);
                 BufferedReader reader = new BufferedReader(new InputStreamReader(in, charSet));
                 String line = null;
                 while ((line = reader.readLine()) != null) {
@@ -192,7 +170,6 @@ public class WebUtil {
     	switch(index) {
     	case 0:result = doJsoupGet(url, luck);break;
     	case 1:result = doClientGet(url, luck);break;
-//    	case 2:result = doConnectionGet(url, luck);break;
     	}
     	return result;
     }
@@ -200,7 +177,6 @@ public class WebUtil {
     private static String doJsoupGet(String url, int luck) throws IOException {
     	return Jsoup.connect(url)
     			.cookie("SUID", LIST_SUID.get(luck))
-//    			.cookie("SUIR", LIST_SUIR.get(luck))
     			.get()
     			.toString();
     }
@@ -208,7 +184,6 @@ public class WebUtil {
     @SuppressWarnings("deprecation")
 	private static String doClientGet(String url, int luck) throws IOException {
     	CookieStore store = new BasicCookieStore();
-//    	store.addCookie(new BasicClientCookie("SUIR", LIST_SUIR.get(luck)));
     	store.addCookie(new BasicClientCookie("SUID", LIST_SUID.get(luck)));
     	getClient().setCookieStore(store);
     	return sendGET(url);

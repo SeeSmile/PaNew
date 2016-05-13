@@ -9,21 +9,29 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 
+import data.Constant;
 import data.CwqWX;
 import db.CwqDB;
+import db.CwqNewDB;
 import utils.WebUtil;
 
 public class CwqHelper {
 	/**
-	 * µÇÂ¼url
+	 * ç™»å½•
 	 */
 	private final String URL_LOGIN = "http://www.cwq.com/Owner/Account/check_login/";
 	
 	/**
-	 * »ñÈ¡Êı¾İÁĞ±íurl
+	 * è·å–åˆ—è¡¨
 	 */
 	private final String URL_WEIXIN = "http://www.cwq.com/Owner/Weixin/get_weixin_list/";
+	
+	/**
+	 * è·å–åœ°åŒºä¿¡æ¯
+	 */
+	private final String URL_REGION = "http://www.cwq.com/Owner/Tool/get_Region_Data/";
 	
 	private final String USER_NAME = "lengzhifu";
 	private final String USER_PWD = "wlf2016";
@@ -32,7 +40,26 @@ public class CwqHelper {
 	private boolean isRun = false;
 	private String id;
 	private String type_id;
+	private String area;
+	private String type_push;
+	private static CwqNewDB newdb = new CwqNewDB();
 	
+	public String getArea() {
+		return area;
+	}
+
+	public void setArea(String area) {
+		this.area = area;
+	}
+
+	public String getType() {
+		return type_push;
+	}
+
+	public void setType(String type_push) {
+		this.type_push = type_push;
+	}
+
 	public void setTypeId(String id) {
 		this.type_id = id;
 	}
@@ -59,11 +86,11 @@ public class CwqHelper {
 				System.out.println("login ok");
 				return true;
 			} else {
-				System.out.println("µÇÂ¼Ê§°Ü:" + json.optString("info"));
+				System.out.println("fail to login:" + json.optString("info"));
 			}
 			
 		} catch (Exception e) {
-			System.out.println("µÇÂ¼Ê§°Ü");
+			System.out.println("login exception");
 			e.printStackTrace();
 		}
 		return false;
@@ -74,20 +101,27 @@ public class CwqHelper {
 			
 			@Override
 			public void run() {
-				final CwqDB db = new CwqDB();
-				startGetList(getWXParam(id), URL_WEIXIN, new GetListener() {
+
+				startGetList(getWXParam(id, area, type_push), URL_WEIXIN, new GetListener() {
 					
 					@Override
 					public void OnFinish(JSONObject json) {
 						CwqWX wx = new Gson().fromJson(json.toString(), CwqWX.class);
+						System.out.println("json:\n" + wx.toString());
+//						try {
+//							db.add(wx, type_id);
+//						} catch (SQLException e) {
+//							System.out.println("execute sql exception");
+//							System.out.println("data:" + json.toString());
+//							isRun = false;
+//							e.printStackTrace();
+//						}	
+						
 						try {
-							db.add(wx, type_id);
+							newdb.insertInfo(wx, type_push, area, type_id);
 						} catch (SQLException e) {
-							System.out.println("¼ÓÈëÊı¾İ¿âÊ§°Ü");
-							System.out.println("data:" + json.toString());
-							isRun = false;
 							e.printStackTrace();
-						}				
+						}
 					}
 				});
 			}
@@ -95,15 +129,23 @@ public class CwqHelper {
 		
 	}
 	
-	private List<NameValuePair> getWXParam(String id) {
+	/**
+	 * è·å–éœ€è¦çš„è¯·æ±‚å‚æ•°
+	 * @param id åˆ†ç±»çš„ç¼–å·
+	 * @param area åœ°åŒºç¼–å·ï¼Œæ ¼å¼ï¼š324,532,6435,777,55
+	 * @return åˆå§‹åŒ–çš„å‚æ•°
+	 */
+	private List<NameValuePair> getWXParam(String id, String area, String type_push) {
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
-		params.add(new BasicNameValuePair("is_celebrity", "0"));
-//		params.add(new BasicNameValuePair("ids", ""));
-//		params.add(new BasicNameValuePair("order_by", ""));
-		params.add(new BasicNameValuePair("all", ""));
-		params.add(new BasicNameValuePair("flex", "1"));
-		params.add(new BasicNameValuePair("zfjg_type", "2"));
+		//ç¡¬å¹¿1ï¼Œè½¯å¹¿2
+		params.add(new BasicNameValuePair("flex", type_push));
+		params.add(new BasicNameValuePair("dfmr_mt", area));
 		params.add(new BasicNameValuePair("cjfl", id));
+
+		params.add(new BasicNameValuePair("is_celebrity", "0"));
+		params.add(new BasicNameValuePair("zfjg_type", "2"));
+		params.add(new BasicNameValuePair("all", ""));
+		System.out.println("params:\n" + params.toString());
 		return params;
 	}
 	
@@ -112,7 +154,7 @@ public class CwqHelper {
 		isRun = true;
 		while(isRun) {
 			try {
-				System.out.println("ÕıÔÚ»ñÈ¡" + page + "Ò³Êı¾İ");
+				System.out.println("current page of " + page);
 				param.add(new BasicNameValuePair("p", page + ""));
 				String result = WebUtil.sendPOST(url, param);
 				JSONObject json = new JSONObject(result);
@@ -124,21 +166,53 @@ public class CwqHelper {
 				}
 				if(array.length() == 0) {
 					isRun = false;
-					System.out.println("Êı¾İ²É¼¯Íê±Ï");
+					System.out.println("stoped");
 				}
-				System.out.println("µÚ" + page + "Ò³Êı¾İ»ñÈ¡Íê±Ï");
-//				if(page > 3) {
-//					isRun = false;
-//				}
+				
 			} catch (Exception e) {
-				System.out.println("»ñÈ¡ĞÅÏ¢Ê§°Ü");
+				System.out.println("run exception");
 				e.printStackTrace();
 			}
 			page++;
 			try {
-				Thread.sleep(1 * 400);
+				Thread.sleep(1 * 1000);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
+			}
+		}
+	}
+	
+	public String getRegion(String id) throws Exception {
+		List<NameValuePair> param = new ArrayList<>();
+		param.add(new BasicNameValuePair("parent_id", id));
+		String text = WebUtil.sendPOST(URL_REGION, param );
+		JSONObject json = new JSONObject(text);
+		JSONArray array = json.getJSONArray("data");
+		String regions = "";
+		for(int i = 0; i < array.length(); i++) {
+			regions += array.getJSONObject(i).optString("region_id") + ",";
+		}
+		return regions.substring(0, regions.length() - 1);
+	}
+	
+	public void getAllAccount() {
+		CwqHelper helper = new CwqHelper();
+		if(helper.login()) {
+			for(int type : Constant.LIST_TYPE_ID) {
+				for(int type_area = 1; type_area < 36; type_area++) {
+					for(int type_push = 1; type_push < 3; type_push++) {
+						if(type_area == 1) {
+							helper.setArea("3412");
+						} else {
+							helper.setArea(type_area + "");
+						}
+						
+						helper.setPage(1);
+						helper.setType(type_push + "");
+						helper.setTypeId(type + "");
+						helper.getWxData();
+					}
+				}
 			}
 		}
 	}

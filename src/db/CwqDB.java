@@ -65,13 +65,11 @@ public class CwqDB extends BaseDB{
 		list.add(new DbParams(CA_DESC, data.getBs_introduction()));
 		list.add(new DbParams(STATUS, mSTATUS));
 		String sql = createInsertSql(TABLE_PRICE, list);
-//		System.out.println("sql = " + sql +", list = " + list.toString());
 		PreparedStatement state = getPrepared(sql);
 		initPst(state, list);
 		state.execute();
 		String cid = getId(data.getBs_weixinhao());
 		if(cid != null) {
-//			System.out.println("cid = " + cid);
 			addPrice(cid, data);
 		}
 		state.close();
@@ -115,9 +113,9 @@ public class CwqDB extends BaseDB{
 	}
 	
 	private static String getFans(String text) {
-		String price = text.replaceFirst("Íò", "0000");
+		String price = text.replaceFirst("ï¿½ï¿½", "0000");
 		if(Integer.valueOf(price) > 1 * 10000 * 10000) {
-			return text.replace("Íò", "");
+			return text.replace("ï¿½ï¿½", "");
 		}
 		return price;
 	}
@@ -184,29 +182,29 @@ public class CwqDB extends BaseDB{
 	
 	public static void downloadFile(String urlString, String filename,
 			String savePath) throws IOException {
-		// ¹¹ÔìURL  
+		// ï¿½ï¿½ï¿½ï¿½URL  
 		URL url = new URL(urlString);
-		// ´ò¿ªÁ¬½Ó  
+		// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½  
 		URLConnection con = url.openConnection();
-		//ÉèÖÃÇëÇó³¬Ê±Îª5s  
+		//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±Îª5s  
 		con.setConnectTimeout(5 * 1000);
-		// ÊäÈëÁ÷  
+		// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½  
 		InputStream is = con.getInputStream();
-		// 1KµÄÊý¾Ý»º³å  
+		// 1Kï¿½ï¿½ï¿½ï¿½Ý»ï¿½ï¿½ï¿½  
 		byte[] bs = new byte[1024];
-		// ¶ÁÈ¡µ½µÄÊý¾Ý³¤¶È  
+		// ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý³ï¿½ï¿½ï¿½  
 		int len;
-		// Êä³öµÄÎÄ¼þÁ÷  
+		// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½  
 		File sf = new File(savePath);
 		if (!sf.exists()) {
 			sf.mkdirs();
 		}
 		OutputStream os = new FileOutputStream(sf.getPath() + "\\" + filename);
-		// ¿ªÊ¼¶ÁÈ¡  
+		// ï¿½ï¿½Ê¼ï¿½ï¿½È¡  
 		while ((len = is.read(bs)) != -1) {
 			os.write(bs, 0, len);
 		}
-		// Íê±Ï£¬¹Ø±ÕËùÓÐÁ´½Ó  
+		// ï¿½ï¿½Ï£ï¿½ï¿½Ø±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½  
 		os.close();
 		is.close();
 	}
@@ -220,5 +218,16 @@ public class CwqDB extends BaseDB{
 		PreparedStatement state = getPrepared(sql);
 		initPst(state, list);
 		state.execute();
+	}
+	
+	public String getcity() throws SQLException {
+		String sql = "select region_name from wlf_region where parent_id=1";
+		PreparedStatement pst = getPrepared(sql);
+		ResultSet result = pst.executeQuery();
+		String text = "";
+		while(result.next()) {
+			text += ",\"" + result.getString("region_name") + "\"";
+		}
+		return text;
 	}
 }

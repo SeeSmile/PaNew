@@ -31,9 +31,9 @@ import utils.SwebUtil;
 import utils.WebUtil;
 public class WXhelper {
 	
-	private static final String KEY_INTRODUCE = "���ܽ���";
-	private static final String KEY_ATT = "��֤";
-	private static final String KEY_NEWS = "�������";
+	private static final String KEY_INTRODUCE = "功能介绍";
+	private static final String KEY_ATT = "微信认证";
+	private static final String KEY_NEWS = "最近文章";
 	
 	private static final String URL_GO = "http://weixin.sogou.com/antispider/thank.php";
 	private static final String URL_IMG = "http://weixin.sogou.com/antispider/";
@@ -41,7 +41,6 @@ public class WXhelper {
 	private static final String URL_REPLACE_ONE = "mp/getcomment";
 	private static final String URL_HEAD = "http://mp.weixin.qq.com/";
 	private static final String URL_SEARCH = "http://weixin.sogou.com/weixin?";
-//	private static final String PARAM_SEARCH = "type=1&ie=utf8&_sug_=y&_sug_type_=&w=01019900&sut=11458&sst0=1461036240572&lkt=0%2C0%2C0";
 	private static final String PARAM_SEARCH = "type=1";
 
 	private String avatar;
@@ -96,6 +95,7 @@ public class WXhelper {
 			json.put("avatar", avatar);
 			json.put("news", array);
 			json.put("sid", file_id);
+			json.put("time", "2016-05-11 00:00:00");
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
@@ -167,44 +167,13 @@ public class WXhelper {
 	}
 	
 	private JSONArray getNewsByUrl(String url) throws IOException, URISyntaxException {
-		Random rand = new Random();
-		int x = rand.nextInt(10);
-		Document doc2;
-		String html = "";
+		Document doc2 = Jsoup.parse(mutil.doPortGet(url));
+		System.out.println(url);
 		String result = "";
-		System.out.print(" 获取新闻;");
-//		if(x % 3 == 0) {
-//			//��ȡ��һ��΢�Ź��ںŵ���ҳ
-//			doc2 = Jsoup.connect(url)
-//					.userAgent("Mozilla")
-//					.cookie("auth", "token")
-//					.timeout(7000)
-//					.get();
-//			result = doc2.toString();
-//		} else if(x % 3 == 1) {
-//			try {
-//				html = WebUtil.sendGET(url);
-//			} catch (Exception e1) {
-//				// TODO Auto-generated catch block
-//				e1.printStackTrace();
-//			}
-//			doc2 = Jsoup.parse(html);
-//			result = html;
-//		} else {
-//			try {
-//				html = WebUtil.getHttpContent(url);
-//			} catch (Exception e1) {
-//				// TODO Auto-generated catch block
-//				e1.printStackTrace();
-//			}
-//			doc2 = Jsoup.parse(html);
-//			result = html;
-//		}
-		
-		doc2 = Jsoup.parse(mutil.doPortGet(url));
-		
 		result = doc2.toString();
-		avatar = doc2.getElementsByClass("radius_avatar").get(0).getElementsByTag("img").get(0).attr("src");
+		if(doc2.getElementsByClass("radius_avatar").size() > 0) {
+			avatar = doc2.getElementsByClass("radius_avatar").get(0).getElementsByTag("img").get(0).attr("src");
+		}
 		int p = result.indexOf("msgList");
 		String text_json = result.substring(p)
 				.replaceAll("&quot;", "\"")
@@ -235,9 +204,7 @@ public class WXhelper {
 							
 					String jsontext = "";
 					try {
-						System.out.println("readurl:" + getReadUrl(contenturl));
 						jsontext = WebUtil.sendGET(getReadUrl(contenturl));
-						System.out.println("jsontext:" + jsontext);
 						SoGouWX swx = new Gson().fromJson(jsontext, SoGouWX.class);
 						swx.setTime(time);
 						swx.setUrl(getHtmlUrl(contenturl));
@@ -256,7 +223,6 @@ public class WXhelper {
 							String itemurl = "";
 							try {
 								itemurl = WebUtil.sendGET(getReadUrl(entity.getContent_url()));
-								System.out.println("itemurl:" + itemurl);
 							} catch (Exception e) {
 								System.out.println("3-n异常\n" + entity.toString());
 							}
@@ -299,7 +265,6 @@ public class WXhelper {
 	
 	private String getReadUrl (String url) throws StringIndexOutOfBoundsException{
 		int postion = url.indexOf("?");
-//		System.out.println(URL_HEAD + URL_REPLACE_ONE + url.substring(postion, url.length() - 1) + URL_REPLACE_TWO);
 		return URL_HEAD + URL_REPLACE_ONE + url.substring(postion, url.length() - 1) + URL_REPLACE_TWO;
 	}
 	

@@ -14,7 +14,7 @@ public class YunSpider extends BaseDB {
 	public static final int STATE_NOACCOUNT = 3;
 	public static final int STATE_NOEXIST = 4;
 	
-	private final String TABLE_WEIXIN = "spider_weixin";
+	private final String TABLE_WEIXIN_SPIDER = "spider_weixin";
 
 	public YunSpider() {
 		super("115.28.39.64", "spider", "fupei", "password");
@@ -25,7 +25,7 @@ public class YunSpider extends BaseDB {
 		list.add(new DbParams("account", entity.getAccount()));
 		list.add(new DbParams("info", entity.toString()));
 		list.add(new DbParams("state", STATE_NORMAL));
-		String sql = createInsertSql(TABLE_WEIXIN, list);
+		String sql = createInsertSql(TABLE_WEIXIN_SPIDER, list);
 		insertInfo(sql, list);
 	}
 	
@@ -47,12 +47,12 @@ public class YunSpider extends BaseDB {
 		ArrayList<DbParams> list = new ArrayList<>();
 		list.add(new DbParams("account", account));
 		list.add(new DbParams("state", state));
-		String sql = createInsertSql(TABLE_WEIXIN, list);
+		String sql = createInsertSql(TABLE_WEIXIN_SPIDER, list);
 		insertInfo(sql, list);
 	}
 	
 	public int getStateByAccount(String account) throws SQLException {
-		String sql = "select * from " + TABLE_WEIXIN + " where account=?";
+		String sql = "select * from " + TABLE_WEIXIN_SPIDER + " where account=?";
 		PreparedStatement pst = getPrepared(sql);
 		pst.setString(1, account);
 		ResultSet result = pst.executeQuery();
@@ -63,7 +63,7 @@ public class YunSpider extends BaseDB {
 	}
 	
 	public void setStateByAccount(String account, int state) throws SQLException {
-		String sql = "update " + TABLE_WEIXIN + " set state=? where account=?";
+		String sql = "update " + TABLE_WEIXIN_SPIDER + " set state=? where account=?";
 		PreparedStatement pst = getPrepared(sql);
 		pst.setInt(1, state);
 		pst.setString(2, account);
@@ -71,7 +71,7 @@ public class YunSpider extends BaseDB {
 	}
 	
 	public String getInfoByAccount(String account) throws SQLException {
-		String sql = "select * from " + TABLE_WEIXIN + " where account=?";
+		String sql = "select * from " + TABLE_WEIXIN_SPIDER + " where account=?";
 		PreparedStatement pst = getPrepared(sql);
 		pst.setString(1, account);
 		ResultSet result = pst.executeQuery();

@@ -15,7 +15,6 @@ import com.google.gson.Gson;
 
 import data.WXEntity;
 import db.CwqDB;
-import db.YunSpider;
 import utils.FileUtil;
 import utils.MD5Util;
 import utils.SFileUtil;
@@ -40,33 +39,34 @@ public class DownloadPic {
 						String line;
 						String path = "f:/images2";
 						int index = 0;
+						CwqDB db = new CwqDB();
 						List<String> nolist = new ArrayList<>();
-							YunSpider spider = new YunSpider();
+						
 							try {
 								while ((line = br.readLine()) != null) {  
 									index++;
 									
 									if(line.length() > 0 && index >= 0) {
 										System.out.println("index:" + index);
-										int p = line.indexOf("|");
-										String account = line.substring(0, p);
-										line = line.substring(p + 1, line.length());
+//										int p = line.indexOf("|");
+//										String account = line.substring(0, p);
+//										line = line.substring(p + 1, line.length());
 										try {
 											WXEntity en = new Gson().fromJson(line, WXEntity.class);
 											FileUtil.downloadFile(en.getAvatar(), MD5Util.MD5(en.getAvatar()) + ".jpg", path);
-//											try {
-//												new CwqDB().insertWX(account, en.getAvatar(), MD5Util.MD5(en.getAvatar()));
-//											} catch (SQLException e) {
-//												e.printStackTrace();
-//											}
-										} catch (IOException e1) {
-											WXEntity en = new Gson().fromJson(line, WXEntity.class);
 											try {
-												spider.insertNoAvatarInfo(en.getAccount());
+												db.insertWX(en.getAccount(), en.getAvatar(), MD5Util.MD5(en.getAvatar()));
 											} catch (SQLException e) {
-												// TODO Auto-generated catch block
 												e.printStackTrace();
 											}
+										} catch (IOException e1) {
+//											WXEntity en = new Gson().fromJson(line, WXEntity.class);
+//											try {
+//												spider.insertNoAvatarInfo(en.getAccount());
+//											} catch (SQLException e) {
+//												// TODO Auto-generated catch block
+//												e.printStackTrace();
+//											}
 											nolist.add(line);
 										}	 
 										

@@ -1,39 +1,65 @@
 package data;
 
+import com.google.gson.Gson;
+
 public class CwqWX {
 	//bs_account_name,bs_weixinhao,bs_head_img,2016-4-18,141,type,bs_introduction,1,dtwdyt,dtwdet,dtwqtwz
 	
 	/**
-	 * Î¢ÐÅÃû×Ö
+	 * Î¢ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	 */
 	private String bs_account_name;
 	/**
-	 * Î¢ÐÅºÅ
+	 * Î¢ï¿½Åºï¿½
 	 */
 	private String bs_weixinhao;
 	/**
-	 * Í·Ïñ
+	 * Í·ï¿½ï¿½
 	 */
 	private String bs_head_img;
 	/**
-	 * ½éÉÜ
+	 * ï¿½ï¿½ï¿½ï¿½
 	 */
 	private String bs_introduction;
 	/**
-	 * Í·Ìõ
+	 * top
 	 */
 	private String dtwdyt;
 	/**
-	 * ´ÎÌõ
+	 * one
 	 */
 	private String dtwdet;
 	/**
-	 * ¶àÍ¼
+	 * two
 	 */
 	private String dtwqtwz;
 	
 	private String bs_fans_num;
-
+	
+	private String bs_order_note;
+	
+	private String bs_weekly_read_avg;
+	
+	private String bs_qr_code;
+	
+	public String getBs_qr_code() {
+		return bs_qr_code;
+	}
+	public void setBs_qr_code(String bs_qr_code) {
+		this.bs_qr_code = bs_qr_code;
+	}
+	public String getBs_order_note() {
+		return bs_order_note;
+	}
+	public void setBs_order_note(String bs_order_note) {
+		this.bs_order_note = bs_order_note;
+	}
+	public String getBs_weekly_read_avg() {
+		return bs_weekly_read_avg;
+	}
+	public void setBs_weekly_read_avg(String bs_weekly_read_avg) {
+		this.bs_weekly_read_avg = bs_weekly_read_avg;
+	}
 	public String getBs_fans_num() {
 		return bs_fans_num;
 	}
@@ -81,6 +107,11 @@ public class CwqWX {
 	}
 	public void setDtwqtwz(String dtwqtwz) {
 		this.dtwqtwz = dtwqtwz;
+	}
+	
+	@Override
+	public String toString() {
+		return new Gson().toJson(this);
 	}
 	
 }

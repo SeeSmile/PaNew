@@ -87,8 +87,8 @@ public class SFileUtil {
 			
 			@Override
 			public void onFinish() {
-				System.out.println("Ò»¹²ÓĞ" + list.size());
-				System.out.println("ÖØ¸´" + list_chong.size());
+				System.out.println("æ€»å…±:" + list.size());
+				System.out.println("é‡å¤:" + list_chong.size());
 			}
 			
 			@Override
@@ -117,8 +117,8 @@ public class SFileUtil {
 			
 			@Override
 			public void onFinish() {
-				System.out.println("Ò»¹²ÓĞ" + list.size());
-				System.out.println("ÖØ¸´" + list_chong.size());
+				System.out.println("å»é‡å:" + list.size());
+				System.out.println("é‡å¤:" + list_chong.size());
 			}
 			
 			@Override
@@ -133,7 +133,7 @@ public class SFileUtil {
 	}
 	
 	public static String trim(String text) {
-		if(text.indexOf("¹ú") != -1) {
+		if(text.indexOf("å›½") != -1) {
 			return "";
 		}
 		if(text.indexOf("?") != -1) {
@@ -143,7 +143,17 @@ public class SFileUtil {
 		Pattern p = Pattern.compile("\\s*");
 		Matcher m = p.matcher(text.trim());
 		t = m.replaceAll("");
-		t = t.replaceAll(" ", "");
+		
+//		int pos = 0;
+//		for(int i = 0; i < text.length(); i++) {
+//			char c = text.charAt(i);
+//			if(Character.isWhitespace(c)) {
+//				pos = i;
+//			}
+//		}
+//		t = text.substring(pos);
+//		System.out.println("pos:" + pos + ", text:" + text + ", t:" + t);
+		
 		return t;
 	}
 }

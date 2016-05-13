@@ -24,8 +24,8 @@ public class FileQuChong {
 	}
 	
 	public static void quChong() {
-		File oldFile = SFileUtil.createDataFile("noa.txt");
-		File newFile = new File(SFileUtil.getDataFile("noa2.txt"));
+		File oldFile = SFileUtil.createDataFile("noaccount_all.txt");
+		File newFile = new File(SFileUtil.getDataFile("ooooo.txt"));
 		try {
 			SFileUtil.lookChong(oldFile, newFile);
 		} catch (IOException e) {

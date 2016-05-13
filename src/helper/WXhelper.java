@@ -95,7 +95,11 @@ public class WXhelper {
 			json.put("avatar", avatar);
 			json.put("news", array);
 			json.put("sid", file_id);
+<<<<<<< HEAD
 			json.put("time", "2016-05-11 00:00:00");
+=======
+			json.put("time", "2016-05-05 00:00:00");
+>>>>>>> origin/master
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
@@ -170,6 +174,12 @@ public class WXhelper {
 		Document doc2 = Jsoup.parse(mutil.doPortGet(url));
 		System.out.println(url);
 		String result = "";
+<<<<<<< HEAD
+=======
+
+		doc2 = Jsoup.parse(mutil.doPortGet(url));
+		
+>>>>>>> origin/master
 		result = doc2.toString();
 		if(doc2.getElementsByClass("radius_avatar").size() > 0) {
 			avatar = doc2.getElementsByClass("radius_avatar").get(0).getElementsByTag("img").get(0).attr("src");

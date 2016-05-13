@@ -13,6 +13,10 @@ import java.util.ArrayList;
 import java.util.List;
 import org.apache.http.HttpHost;
 import org.bson.Document;
+<<<<<<< HEAD
+=======
+import org.json.JSONException;
+>>>>>>> origin/master
 import org.json.JSONObject;
 
 import com.mongodb.BasicDBObject;
@@ -39,7 +43,11 @@ public class TestMongo {
 	private static int index = 0;
 	private static List<String> list_unknow = new ArrayList<>();
 	private static int token_index = 0;
+<<<<<<< HEAD
 	public static int lastIndex = 0;
+=======
+	public static int lastIndex = 3582;
+>>>>>>> origin/master
 	
 	/**
 	 * @param args
@@ -69,6 +77,7 @@ public class TestMongo {
 								}
 								if(isrun) {
 									long start_time = System.currentTimeMillis();
+<<<<<<< HEAD
 									if(line != null && line.length() > 0) {
 										try {
 											
@@ -83,6 +92,43 @@ public class TestMongo {
 											  	
 											} catch (IOException e) {
 												System.out.println("\nIOE错误");
+=======
+									try {
+										if((index - token_index) % 45 == 0) {
+											doRestart();
+										}
+										  System.out.print("正在" + index + "行数据:" + line + "; ");
+										  
+										  	WXEntity en = new WXhelper().getUrlbyAccount(line.trim(), list);
+										  	FileUtil.writeText2File(PATH_AVATAR, line + "|" + en.toString());
+										  	line = br.readLine();
+										  	index++;
+											JSONObject json = new WXhelper().getSearchList(line.trim(), list);
+											Document doc_main = new Document();
+											doc_main.putAll(BasicDBObject.parse(json.toString()));
+											BaseMonGoDB.getInstance().insertInfo(doc_main);
+										} catch (IOException e) {
+											System.out.println("\nIOE错误");
+											e.printStackTrace();
+											break;
+										} catch (FibdException e) {
+											System.out.println(" 被禁了:" + line.trim());
+											doRestart();
+									
+										} catch (AccountErrorException e) {
+											list_unknow.add(line.trim());
+											FileUtil.writeText2File(PATH_NOACCOUNT, line.trim());
+											e.showError();
+											line = br.readLine();
+											index++;
+										} catch (Exception e){
+											System.out.println("超级异常");
+										} finally {
+											try {
+												Thread.sleep(5 * 1000);
+												System.out.println(" 耗时: " + (System.currentTimeMillis() - start_time) / 1000 + "秒");
+											} catch (InterruptedException e) {
+>>>>>>> origin/master
 												e.printStackTrace();
 												break;
 											} catch (FibdException e) {
@@ -156,6 +202,10 @@ public class TestMongo {
 					try {
 						en = WXhelper.getUrlbyAccount(text, null);
 						FileUtil.writeText2File(PATH_AVATAR, en.toString());
+						JSONObject json = new WXhelper().getSearchList2(en.getAccount(), new JSONObject(en.toString()));
+						Document doc_main = new Document();
+						doc_main.putAll(BasicDBObject.parse(json.toString()));
+						BaseMonGoDB.getInstance().insertInfo(doc_main);
 					} catch (IOException e) {
 						System.out.println("url有问题:" + e.toString());
 					} catch (FibdException e) {
@@ -167,6 +217,9 @@ public class TestMongo {
 						
 					} catch (URISyntaxException e) {
 						System.out.println("666");
+					} catch (JSONException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
 					} finally {
 						System.out.println("\n");
 						try {

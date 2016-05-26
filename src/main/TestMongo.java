@@ -81,7 +81,6 @@ public class TestMongo {
 											  System.out.print("正在" + index + "行数据:" + line + "; ");
 											  	WXEntity en = new WXhelper().getUrlbyAccount(line.trim(), list);
 											  	FileUtil.writeText2File(PATH_AVATAR, en.toString());
-											  	
 												JSONObject json = new WXhelper().getSearchList(line.trim(), list);
 												Document doc_main = new Document();
 												doc_main.putAll(BasicDBObject.parse(json.toString()));

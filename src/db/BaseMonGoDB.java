@@ -1,34 +1,39 @@
 package db;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
-import org.bson.BsonDocument;
+import org.bson.BSON;
 import org.bson.Document;
-import org.bson.codecs.configuration.CodecRegistry;
-import org.bson.conversions.Bson;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
+import com.gargoylesoftware.htmlunit.javascript.host.Set;
+import com.google.gson.Gson;
 import com.mongodb.BasicDBObject;
-import com.mongodb.DB;
-import com.mongodb.DBCursor;
-import com.mongodb.DBObject;
 import com.mongodb.MongoClient;
-import com.mongodb.client.FindIterable;
+import com.mongodb.MongoCredential;
+import com.mongodb.ServerAddress;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.MongoIterable;
 
-import data.WXMonGoEntity;
+import data.WXEntity;
+import data.WxNews;
 
 public class BaseMonGoDB {
 	
-//	private static String DB_ADDRESS = "192.168.0.197";
 	private static String DB_ADDRESS = "203.195.238.137";
+//	private static String DB_ADDRESS = "115.28.39.64";
 	private static int DB_PORT = 27017;
-//	private static String DB_NAME = "dbwx";
-	private static String DB_NAME = "360netnews";
+//	private static String DB_NAME = "360netnews";
+	private static String DB_NAME = "360netnews_test";
+//	private static String DB_NAME = "dbtest";
 	private static String DB_COLLECTION = "wlf_data_wx";
+//	private static String DB_COLLECTION = "wlf_fupei";
 	
 	private MongoClient mClient;
 	private MongoDatabase mDatabase;
@@ -47,7 +52,7 @@ public class BaseMonGoDB {
 	}
 	
 	/**
-	 * �������ݿ�
+	 * ������ݿ�
 	 */
 	private void connectDB() {
 		initClient();
@@ -55,18 +60,25 @@ public class BaseMonGoDB {
 	}
 	
 	/**
-	 * ������Ϣ
+	 * ������Ϣ
 	 */
 	public void insertInfo(Document document) {
 		connectDB();
 		MongoCollection<Document> collection = mDatabase.getCollection(DB_COLLECTION);
         List<Document> documents = new ArrayList<Document>();  
         documents.add(document);  
-        collection.insertMany(documents);  
+        collection.insertMany(documents);      
 	}
 	
 	private void initClient() {
 		if(mClient == null) {
+			
+			//需要用户名和密码的连接
+//			MongoCredential credential = MongoCredential.createCredential("fproot", DB_NAME, "123456".toCharArray()); 
+//			ServerAddress serverAddress = new ServerAddress(DB_ADDRESS, DB_PORT);
+//			mClient = new MongoClient(serverAddress, Arrays.asList(credential));
+			
+			//不需要密码的连接
 			mClient = new MongoClient(DB_ADDRESS, DB_PORT);
 		}
 	}
@@ -90,18 +102,48 @@ public class BaseMonGoDB {
 	}
 	
 	public void getAllInfo() {
-		MongoCursor<Document> cursor = mDatabase.getCollection(DB_COLLECTION).find().iterator();
-		try {
-			int i = 0;
-		    while (cursor.hasNext()) {
-		    	if(i > 9) {
-		    		break;
-		    	}
-		        System.out.println(cursor.next().toJson());
-		        i++;
-		    }
-		} finally {
-		    cursor.close();
+		BasicDBObject fifter = new BasicDBObject();
+		fifter.put("state", 1);
+		MongoCursor<Document> cursor =  mDatabase.getCollection(DB_COLLECTION).find(fifter).iterator();
+		while(cursor.hasNext()) {
+			System.out.println(cursor.next().toJson());
 		}
+	}
+	
+	/**
+	 * 得到名称为account账号的信息列表
+	 * @param account
+	 * @return
+	 */
+	public List<MongoWXEntity> getDocumentByAccount(String account) {
+		BasicDBObject fifter = new BasicDBObject();
+		fifter.put("account", account);
+		MongoCursor<Document> cursor =  mDatabase.getCollection(DB_COLLECTION).find(fifter).iterator();
+		List<MongoWXEntity> list = new ArrayList<>();
+		while(cursor.hasNext()) {
+			String text = cursor.next().toJson();
+			MongoWXEntity entity = new Gson().fromJson(text, MongoWXEntity.class);
+			list.add(entity);
+		}
+		return list;
+	}
+	
+	public void updateAccount() {
+		
+	}
+	
+	public MongoWXEntity getSingleEntity(String account) {
+		MongoWXEntity entity = new MongoWXEntity();
+		BasicDBObject fifter = new BasicDBObject();
+		fifter.put("account", account);
+		MongoCursor<Document> cursor =  mDatabase.getCollection(DB_COLLECTION).find(fifter).iterator();
+		List<MongoWXEntity> list = new ArrayList<>();
+		  
+		while(cursor.hasNext()) {
+			String text = cursor.next().toJson();
+			MongoWXEntity en = new Gson().fromJson(text, MongoWXEntity.class);
+			list.add(en);
+		}
+		return entity;
 	}
 }

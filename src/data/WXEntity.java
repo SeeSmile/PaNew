@@ -1,5 +1,7 @@
 package data;
 
+import java.util.List;
+
 import com.google.gson.Gson;
 
 public class WXEntity {
@@ -7,33 +9,37 @@ public class WXEntity {
 	public static final String ATT_YES = "1";
 	public static final String ATT_NO = "2";
 	
+	private String sid;
+	
+	private List<WxNews> news;
+	
 	private String state;
 	
 	private String avatar;
 	
 	private String qrcode;
 	/**
-	 * ÍøÒ³Ö÷Ò³µØÖ·
+	 * ï¿½ï¿½Ò³ï¿½ï¿½Ò³ï¿½ï¿½Ö·
 	 */
 	private String url;
 	/**
-	 * ÊÇ·ñÈÏÖ¤£º 1ÊÇ; 2·ñ
+	 * ï¿½Ç·ï¿½ï¿½ï¿½Ö¤ï¿½ï¿½ 1ï¿½ï¿½; 2ï¿½ï¿½
 	 */
 	private String is_att;
 	/**
-	 * Î¢ÐÅ½éÉÜ
+	 * Î¢ï¿½Å½ï¿½ï¿½ï¿½
 	 */
 	private String introduce;
 	/**
-	 * ÈÏÖ¤ÐÅÏ¢ÃèÊö
+	 * ï¿½ï¿½Ö¤ï¿½ï¿½Ï¢ï¿½ï¿½ï¿½ï¿½
 	 */
 	private String info_att;
 	/**
-	 * Î¢ÐÅÃû×Ö
+	 * Î¢ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	 */
 	private String name;
 	/**
-	 * Î¢ÐÅÕËºÅ
+	 * Î¢ï¿½ï¿½ï¿½Ëºï¿½
 	 */
 	private String account;
 	
@@ -107,6 +113,30 @@ public class WXEntity {
 		this.account = account;
 	}
 	
+	public String getSid() {
+		return sid;
+	}
+
+	public void setSid(String sid) {
+		this.sid = sid;
+	}
+
+	public List<WxNews> getNews() {
+		return news;
+	}
+
+	public void setNews(List<WxNews> news) {
+		this.news = news;
+	}
+
+	public String getState() {
+		return state;
+	}
+
+	public void setState(String state) {
+		this.state = state;
+	}
+
 	@Override
 	public String toString() {
 		return new Gson().toJson(this);

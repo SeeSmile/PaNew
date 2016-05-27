@@ -1,5 +1,7 @@
 package db;
 
+import helper.CountHelper;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -13,6 +15,7 @@ import org.json.JSONObject;
 import com.gargoylesoftware.htmlunit.javascript.host.Set;
 import com.google.gson.Gson;
 import com.mongodb.BasicDBObject;
+import com.mongodb.Mongo;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoCredential;
 import com.mongodb.ServerAddress;
@@ -62,12 +65,40 @@ public class BaseMonGoDB {
 	/**
 	 * ������Ϣ
 	 */
-	public void insertInfo(Document document) {
+	public void insertInfo(Document entity) {
 		connectDB();
 		MongoCollection<Document> collection = mDatabase.getCollection(DB_COLLECTION);
-        List<Document> documents = new ArrayList<Document>();  
-        documents.add(document);  
-        collection.insertMany(documents);      
+		String sid = entity.getString("sid");
+		String account = entity.getString("account");
+//		System.out.println("sid:" + sid + ", account:" + account);
+		List<MongoWXEntity> list = getDocumentByAccount(account);
+		if(list.size() == 0) {
+			MongoWXEntity wx = new Gson().fromJson(entity.toJson(), MongoWXEntity.class);
+			list.add(wx);
+			wx.setCount(CountHelper.getCountWx(list));
+			Document document = new Document();
+	        document.putAll(BasicDBObject.parse(wx.toString()));  
+	        collection.insertOne(document); 
+	        System.out.println("添加了账号信息：" + account);
+		} else {
+			System.out.println("更新：" + account);
+			MongoWXEntity entityOflist = list.get(0);
+			try {
+				JSONObject json = new JSONObject(entity.toJson());
+				MongoWXEntity wx = new Gson().fromJson(json.toString(), MongoWXEntity.class);
+				if(wx.getNews() != null && wx.getNews().size() > 0) {
+					wx.getNews().addAll(entityOflist.getNews());
+					list.add(wx);
+					wx.setCount(CountHelper.getCountWx(list));
+				}
+				updateAccount(wx);
+				System.out.println("更新了信息:" + account);
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+			
+		}
+     
 	}
 	
 	private void initClient() {
@@ -128,8 +159,23 @@ public class BaseMonGoDB {
 		return list;
 	}
 	
-	public void updateAccount() {
-		
+	public void updateAccount(MongoWXEntity entity) {
+		deleteAccount(entity);
+		Document doc = new Document();
+		MongoCollection<Document> collection = mDatabase.getCollection(DB_COLLECTION);
+        doc.putAll(BasicDBObject.parse(entity.toString()));
+        collection.insertOne(doc); 
+	}
+	
+	private void deleteAccount(MongoWXEntity entity) {
+		BasicDBObject data = new BasicDBObject();  
+        //删除名称为lucy的记录  
+        data.put("account", entity.getAccount());  
+        //传入[空实例]删除所有  
+        mDatabase.getCollection(DB_COLLECTION).deleteOne(data);
+//		BasicDBObject fifter = new BasicDBObject();
+//		fifter.put("account", entity.getAccount());
+//		mDatabase.getCollection(DB_COLLECTION).find(fifter).
 	}
 	
 	public MongoWXEntity getSingleEntity(String account) {

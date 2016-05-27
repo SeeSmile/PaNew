@@ -31,10 +31,11 @@ import utils.SFileUtil.ReadListener;
 import utils.WebUtil;
 import data.WXEntity;
 import db.BaseMonGoDB;
+import db.MongoWXEntity;
 
 public class TestMongo {
 
-	public static final String last_name = "496";
+	public static final String last_name = "20";
 	public static final String PATH_NOACCOUNT = SFileUtil.getDataFile("noaccount.txt");
 	public static final String PATH_WEIXINID = SFileUtil.getDataFile("weixin_all.txt");
 	public static final String PATH_AVATAR = SFileUtil.getDataFile("avatar.txt");
@@ -82,9 +83,9 @@ public class TestMongo {
 											  	WXEntity en = new WXhelper().getUrlbyAccount(line.trim(), list);
 											  	FileUtil.writeText2File(PATH_AVATAR, en.toString());
 												JSONObject json = new WXhelper().getSearchList(line.trim(), list);
-												Document doc_main = new Document();
-												doc_main.putAll(BasicDBObject.parse(json.toString()));
-												BaseMonGoDB.getInstance().insertInfo(doc_main);
+												Document document = new Document();
+												document.putAll(BasicDBObject.parse(json.toString()));
+												BaseMonGoDB.getInstance().insertInfo(document);
 											  	
 											} catch (IOException e) {
 												System.out.println("\nIOE错误");
@@ -100,14 +101,15 @@ public class TestMongo {
 												FileUtil.writeText2File(PATH_NOACCOUNT, line.trim());
 												e.showError();
 											} catch (Exception e){
+												e.printStackTrace();
 												System.out.println("超级异常");
 											} finally {
-												try {
-													Thread.sleep(5 * 1000);
-													System.out.println(" 耗时: " + (System.currentTimeMillis() - start_time) / 1000 + "秒");
-												} catch (InterruptedException e) {
-													e.printStackTrace();
-												}
+//												try {
+//													Thread.sleep(5 * 1000);
+//													System.out.println(" 耗时: " + (System.currentTimeMillis() - start_time) / 1000 + "秒");
+//												} catch (InterruptedException e) {
+//													e.printStackTrace();
+//												}
 											}
 									}
 									
@@ -165,7 +167,7 @@ public class TestMongo {
 						JSONObject json = new WXhelper().getSearchList2(en.getAccount(), new JSONObject(en.toString()));
 						Document doc_main = new Document();
 						doc_main.putAll(BasicDBObject.parse(json.toString()));
-						BaseMonGoDB.getInstance().insertInfo(doc_main);
+//						BaseMonGoDB.getInstance().insertInfo(doc_main);
 					} catch (IOException e) {
 						System.out.println("url有问题:" + e.toString());
 					} catch (FibdException e) {

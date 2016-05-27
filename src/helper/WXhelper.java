@@ -78,7 +78,10 @@ public class WXhelper {
 			JSONArray array =  getNewsByUrl(entity.getUrl());
 			json.put("avatar", avatar);
 			json.put("news", array);
+			json.put("state", "0");
+			json.put("index_status", "0");
 			json.put("sid", file_id);
+			json.put("time", "2016-05-25 00:00:00");
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
@@ -88,15 +91,14 @@ public class WXhelper {
 	
 	public JSONObject getSearchList2(String account, JSONObject json) throws IOException, FibdException, AccountErrorException, URISyntaxException {
 		mutil = new SwebUtil();
-	
 		try {
-			
 			JSONArray array =  getNewsByUrl(json.optString("url"));
 			json.put("avatar", avatar);
 			json.put("news", array);
+			json.put("state", "0");
 			json.put("sid", file_id);
+			json.put("index_status", "0");
 			json.put("time", "2016-05-25 00:00:00");
-
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}

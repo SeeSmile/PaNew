@@ -104,7 +104,7 @@ public class MongoWXEntity{
 		setMax_read_num(wx.getMax_read_num());
 	}
 
-	private String index_status;
+//	private String index_status;
     private String sid;
     private String time;
     private String is_att;
@@ -151,13 +151,13 @@ public class MongoWXEntity{
 //		this.count = count;
 //	}
 
-	public String getIndex_status() {
-		return index_status;
-	}
-
-	public void setIndex_status(String index_status) {
-		this.index_status = index_status;
-	}
+//	public String getIndex_status() {
+//		return index_status;
+//	}
+//
+//	public void setIndex_status(String index_status) {
+//		this.index_status = index_status;
+//	}
 
 	public String getSid() {
         return sid;
@@ -316,6 +316,12 @@ public class MongoWXEntity{
         @Override
         public String toString() {
         	return new Gson().toJson(this);
+        }
+        
+        @Override
+        public boolean equals(Object obj) {
+        	NewsBean o = (NewsBean) obj;
+        	return o.getFileid().equals(getFileid());
         }
     }
 }

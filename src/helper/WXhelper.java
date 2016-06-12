@@ -79,13 +79,11 @@ public class WXhelper {
 			json.put("avatar", avatar);
 			json.put("news", array);
 			json.put("state", "0");
-			json.put("index_status", "0");
 			json.put("sid", file_id);
-			json.put("time", "2016-05-25 00:00:00");
+			json.put("time", "2016-06-12 00:00:00");
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
-		
 		return json;
 	}
 	
@@ -97,8 +95,7 @@ public class WXhelper {
 			json.put("news", array);
 			json.put("state", "0");
 			json.put("sid", file_id);
-			json.put("index_status", "0");
-			json.put("time", "2016-05-25 00:00:00");
+			json.put("time", "2016-06-12 00:00:00");
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}

@@ -34,7 +34,6 @@ public class CountHelper {
 		wx.setTotal_read_num(getAllReadCount(list));
 		wx.setWeek_update_frequency(getRangeWeek(list));
 		wx.setRefer_read_num(getModelofRead(list));
-		System.out.println(new Gson().toJson(wx));
 		return wx;
 	}
 	

@@ -26,6 +26,8 @@ import com.mongodb.client.MongoIterable;
 
 import data.WXEntity;
 import data.WxNews;
+import db.MongoWXEntity.NewsBean;
+import db.MongoWXEntity.NewsBean;
 
 public class BaseMonGoDB {
 	
@@ -68,9 +70,7 @@ public class BaseMonGoDB {
 	public void insertInfo(Document entity) {
 		connectDB();
 		MongoCollection<Document> collection = mDatabase.getCollection(DB_COLLECTION);
-		String sid = entity.getString("sid");
 		String account = entity.getString("account");
-//		System.out.println("sid:" + sid + ", account:" + account);
 		List<MongoWXEntity> list = getDocumentByAccount(account);
 		if(list.size() == 0) {
 			MongoWXEntity wx = new Gson().fromJson(entity.toJson(), MongoWXEntity.class);
@@ -81,24 +81,36 @@ public class BaseMonGoDB {
 	        collection.insertOne(document); 
 	        System.out.println("添加了账号信息：" + account);
 		} else {
-			System.out.println("更新：" + account);
 			MongoWXEntity entityOflist = list.get(0);
-			try {
-				JSONObject json = new JSONObject(entity.toJson());
-				MongoWXEntity wx = new Gson().fromJson(json.toString(), MongoWXEntity.class);
-				if(wx.getNews() != null && wx.getNews().size() > 0) {
-					wx.getNews().addAll(entityOflist.getNews());
-					list.add(wx);
-					wx.setCount(CountHelper.getCountWx(list));
-				}
-				updateAccount(wx);
-				System.out.println("更新了信息:" + account);
-			} catch (JSONException e) {
-				e.printStackTrace();
+			MongoWXEntity wx = new Gson().fromJson(entity.toJson(), MongoWXEntity.class);
+			if(wx.getNews() != null && wx.getNews().size() > 0) {
+				wx.getNews().addAll(entityOflist.getNews());
+				list.clear();
+				list.add(wx);
+				wx.setCount(CountHelper.getCountWx(list));
 			}
-			
+			quChong(wx);
+			updateAccount(wx);
+			System.out.println("更新了信息:" + account);
 		}
-     
+	}
+	
+	private void quChong(MongoWXEntity entity) {
+		List<NewsBean> list = new ArrayList<>();
+		for(NewsBean en : entity.getNews()) {
+			if(list.contains(en)) {
+				int read_num = Integer.valueOf(list.get(list.indexOf(en)).getRead_num());
+				int read_num2 = Integer.valueOf(en.getRead_num());
+				if(read_num < read_num2) {
+					list.remove(list.indexOf(en));
+					list.add(en);
+				}
+			} else {
+				list.add(en);
+			}
+		}
+		entity.getNews().clear();
+		entity.getNews().addAll(list);
 	}
 	
 	private void initClient() {
@@ -153,6 +165,7 @@ public class BaseMonGoDB {
 		List<MongoWXEntity> list = new ArrayList<>();
 		while(cursor.hasNext()) {
 			String text = cursor.next().toJson();
+			System.out.println("text:\n" + text);
 			MongoWXEntity entity = new Gson().fromJson(text, MongoWXEntity.class);
 			list.add(entity);
 		}
@@ -163,8 +176,16 @@ public class BaseMonGoDB {
 		deleteAccount(entity);
 		Document doc = new Document();
 		MongoCollection<Document> collection = mDatabase.getCollection(DB_COLLECTION);
-        doc.putAll(BasicDBObject.parse(entity.toString()));
-        collection.insertOne(doc); 
+		try {
+			JSONObject json = new JSONObject(entity.toString());
+			json.put("index_status", "0");
+			 doc.putAll(BasicDBObject.parse(json.toString()));
+		     collection.insertOne(doc); 
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+       
 	}
 	
 	private void deleteAccount(MongoWXEntity entity) {
@@ -172,10 +193,7 @@ public class BaseMonGoDB {
         //删除名称为lucy的记录  
         data.put("account", entity.getAccount());  
         //传入[空实例]删除所有  
-        mDatabase.getCollection(DB_COLLECTION).deleteOne(data);
-//		BasicDBObject fifter = new BasicDBObject();
-//		fifter.put("account", entity.getAccount());
-//		mDatabase.getCollection(DB_COLLECTION).find(fifter).
+        mDatabase.getCollection(DB_COLLECTION).deleteMany(data);
 	}
 	
 	public MongoWXEntity getSingleEntity(String account) {

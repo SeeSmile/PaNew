@@ -44,14 +44,18 @@ public class TestMongo {
 	private static List<String> list_unknow = new ArrayList<>();
 	private static int token_index = 0;
 
-	public static int lastIndex = 0;
+	public static int lastIndex = 1;
 
 	
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		start(null);
+		try {
+			start2();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public static void start(final List<HttpHost> list) {
@@ -167,7 +171,7 @@ public class TestMongo {
 						JSONObject json = new WXhelper().getSearchList2(en.getAccount(), new JSONObject(en.toString()));
 						Document doc_main = new Document();
 						doc_main.putAll(BasicDBObject.parse(json.toString()));
-//						BaseMonGoDB.getInstance().insertInfo(doc_main);
+						BaseMonGoDB.getInstance().insertInfo(doc_main);
 					} catch (IOException e) {
 						System.out.println("url有问题:" + e.toString());
 					} catch (FibdException e) {

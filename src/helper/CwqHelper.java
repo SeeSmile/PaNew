@@ -1,5 +1,7 @@
 package helper;
 
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,9 +14,11 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 
 import data.Constant;
+import data.CwqWBEntity;
 import data.CwqWX;
 import db.CwqDB;
 import db.CwqNewDB;
+import utils.MD5Util;
 import utils.WebUtil;
 
 public class CwqHelper {
@@ -28,6 +32,12 @@ public class CwqHelper {
 	 */
 	private final String URL_WEIXIN = "http://www.cwq.com/Owner/Weixin/get_weixin_list/";
 	
+	/**
+	 * 获取微播信息
+	 */
+	private final String URL_WEIBO= "http://www.cwq.com/Owner/Weibo/get_grassroots_list/";
+	
+	private final static String URL_WEIBO_MAIN = "http://www.cwq.com/Owner/Weibo/getWeiboUrl/";
 	/**
 	 * 获取地区信息
 	 */
@@ -97,17 +107,17 @@ public class CwqHelper {
 	}
 	
 	public void getWxData() {
-		new Thread(new Runnable() {
-			
-			@Override
-			public void run() {
+//		new Thread(new Runnable() {
+//			
+//			@Override
+//			public void run() {
 
 				startGetList(getWXParam(id, area, type_push), URL_WEIXIN, new GetListener() {
 					
 					@Override
 					public void OnFinish(JSONObject json) {
 						CwqWX wx = new Gson().fromJson(json.toString(), CwqWX.class);
-						System.out.println("json:\n" + wx.toString());
+						System.out.println("account: " + wx.getBs_account_name());
 //						try {
 //							db.add(wx, type_id);
 //						} catch (SQLException e) {
@@ -124,8 +134,8 @@ public class CwqHelper {
 						}
 					}
 				});
-			}
-		}).start();
+//			}
+//		}).start();
 		
 	}
 	
@@ -145,6 +155,20 @@ public class CwqHelper {
 		params.add(new BasicNameValuePair("is_celebrity", "0"));
 		params.add(new BasicNameValuePair("zfjg_type", "2"));
 		params.add(new BasicNameValuePair("all", ""));
+		System.out.println("params:\n" + params.toString());
+		return params;
+	}
+	
+	private List<NameValuePair> getWeiBoParam(String id, String area, String type_push) {
+		List<NameValuePair> params = new ArrayList<NameValuePair>();
+		//硬广1，软广2
+		params.add(new BasicNameValuePair("pt_type", "1"));
+		params.add(new BasicNameValuePair("dfmr_mt", area));
+		params.add(new BasicNameValuePair("cjfl", id));
+
+		params.add(new BasicNameValuePair("is_celebrity", "0"));
+		params.add(new BasicNameValuePair("zfjg_type", "3"));
+//		params.add(new BasicNameValuePair("all", ""));
 		System.out.println("params:\n" + params.toString());
 		return params;
 	}
@@ -174,26 +198,49 @@ public class CwqHelper {
 				e.printStackTrace();
 			}
 			page++;
-			try {
-				Thread.sleep(1 * 1000);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
+			
 		}
 	}
 	
-	public String getRegion(String id) throws Exception {
-		List<NameValuePair> param = new ArrayList<>();
-		param.add(new BasicNameValuePair("parent_id", id));
-		String text = WebUtil.sendPOST(URL_REGION, param );
-		JSONObject json = new JSONObject(text);
-		JSONArray array = json.getJSONArray("data");
-		String regions = "";
-		for(int i = 0; i < array.length(); i++) {
-			regions += array.getJSONObject(i).optString("region_id") + ",";
-		}
-		return regions.substring(0, regions.length() - 1);
+	public void getWeiBoData() {
+		final CwqNewDB db = new CwqNewDB();
+		startGetList(getWeiBoParam(id, area, type_push), URL_WEIBO, new GetListener() {
+			
+			@Override
+			public void OnFinish(JSONObject json) {
+				System.out.println("json:\n" + json);
+				CwqWBEntity entity = new Gson().fromJson(json.toString(), CwqWBEntity.class);
+				try {
+					if(type_id.equals("3412")) {
+						type_id = "1";
+					}
+					try {
+						String url = getMainUrl(entity.getBs_account_name());
+						entity.setBs_weibo_url(url);
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					db.addWeiBoInfo(entity, type_id);
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		});
 	}
+	
+//	public String getRegion(String id) throws Exception {
+//		List<NameValuePair> param = new ArrayList<>();
+//		param.add(new BasicNameValuePair("parent_id", id));
+//		String text = WebUtil.sendPOST(URL_REGION, param );
+//		JSONObject json = new JSONObject(text);
+//		JSONArray array = json.getJSONArray("data");
+//		String regions = "";
+//		for(int i = 0; i < array.length(); i++) {
+//			regions += array.getJSONObject(i).optString("region_id") + ",";
+//		}
+//		return regions.substring(0, regions.length() - 1);
+//	}
 	
 	public void getAllAccount() {
 		CwqHelper helper = new CwqHelper();
@@ -206,7 +253,6 @@ public class CwqHelper {
 						} else {
 							helper.setArea(type_area + "");
 						}
-						
 						helper.setPage(1);
 						helper.setType(type_push + "");
 						helper.setTypeId(type + "");
@@ -215,6 +261,21 @@ public class CwqHelper {
 				}
 			}
 		}
+	}
+	
+	public static String getMainUrl(String accountName) throws Exception {
+		String url = "";
+		List<NameValuePair> param = new ArrayList<>();
+		String account = accountName.trim();
+		param.add(new BasicNameValuePair("account", URLEncoder.encode(account, "UTF-8")));
+		param.add(new BasicNameValuePair("type", "1"));
+		System.out.println("param:" + param.toString());
+		String result = WebUtil.sendPOST(URL_WEIBO_MAIN, param);
+		JSONObject json = new JSONObject(result);
+		if(json.optString("status").equals("0")) {
+			url = json.optString("data");
+		}
+		return url;
 	}
 	
 	interface GetListener{

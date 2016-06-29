@@ -85,6 +85,7 @@ public class WebUtil {
         	HttpEntity postParams = new UrlEncodedFormEntity(param);
             httpPost.setEntity(postParams);
         }
+        httpPost.addHeader("Content-Type","application/x-www-form-urlencoded; charset=UTF-8");
         CloseableHttpResponse httpResponse = getClient().execute(httpPost);
         BufferedReader reader = new BufferedReader(new InputStreamReader(
                 httpResponse.getEntity().getContent(), "utf-8"));
@@ -226,7 +227,6 @@ public class WebUtil {
     			// TODO Auto-generated catch block
     			e.printStackTrace();
     		} catch (IOException e) {
-    			// TODO Auto-generated catch block
     			e.printStackTrace();
     		} catch (Exception e) {
     			// TODO Auto-generated catch block

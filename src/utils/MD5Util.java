@@ -5,13 +5,13 @@ public class MD5Util {
         char hexDigits[]={'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'};       
         try {
             byte[] btInput = s.getBytes();
-            // »ñµÃMD5ÕªÒªËã·¨µÄ MessageDigest ¶ÔÏó
+            // ï¿½ï¿½ï¿½MD5ÕªÒªï¿½ã·¨ï¿½ï¿½ MessageDigest ï¿½ï¿½ï¿½ï¿½
             MessageDigest mdInst = MessageDigest.getInstance("MD5");
-            // Ê¹ÓÃÖ¸¶¨µÄ×Ö½Ú¸üÐÂÕªÒª
+            // Ê¹ï¿½ï¿½Ö¸ï¿½ï¿½ï¿½ï¿½ï¿½Ö½Ú¸ï¿½ï¿½ï¿½ÕªÒª
             mdInst.update(btInput);
-            // »ñµÃÃÜÎÄ
+            // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             byte[] md = mdInst.digest();
-            // °ÑÃÜÎÄ×ª»»³ÉÊ®Áù½øÖÆµÄ×Ö·û´®ÐÎÊ½
+            // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×ªï¿½ï¿½ï¿½ï¿½Ê®ï¿½ï¿½ï¿½ï¿½Æµï¿½ï¿½Ö·ï¿½ï¿½ï¿½Ê½
             int j = md.length;
             char str[] = new char[j * 2];
             int k = 0;
@@ -26,8 +26,37 @@ public class MD5Util {
             return null;
         }
     }
-    public static void main(String[] args) {
-        System.out.println(MD5Util.MD5("20121221"));
-        System.out.println(MD5Util.MD5("¼ÓÃÜ"));
-    }
+    public static String gbEncoding(final String gbString) {   
+        char[] utfBytes = gbString.toCharArray();   
+              String unicodeBytes = "";   
+               for (int byteIndex = 0; byteIndex < utfBytes.length; byteIndex++) {   
+                    String hexB = Integer.toHexString(utfBytes[byteIndex]);   
+                      if (hexB.length() <= 2) {   
+                          hexB = "00" + hexB;   
+                     }   
+                      unicodeBytes = unicodeBytes + "\\u" + hexB;   
+                  }   
+                  System.out.println("unicodeBytes is: " + unicodeBytes);   
+                  return unicodeBytes;   
+             }   
+            
+            public static String decodeUnicode(final String dataStr) {   
+               int start = 0;   
+                 int end = 0;   
+                final StringBuffer buffer = new StringBuffer();   
+                 while (start > -1) {   
+                    end = dataStr.indexOf("\\u", start + 2);   
+                     String charStr = "";   
+                     if (end == -1) {   
+                         charStr = dataStr.substring(start + 2, dataStr.length());   
+                    } else {   
+                        charStr = dataStr.substring(start + 2, end);   
+                     }   
+                     char letter = (char) Integer.parseInt(charStr, 16); // 16è¿›åˆ¶parseæ•´å½¢å­—ç¬¦ä¸²ã€‚   
+                   buffer.append(new Character(letter).toString());   
+                   start = end;   
+                 }   
+                 return buffer.toString();   
+             }   
+         
 }

@@ -8,6 +8,12 @@ import java.util.ArrayList;
 
 public class BaseDB {
 	
+	public static final String KEY_TIME = "create_time";
+	public static final String KEY_MID = "mid";
+	public static final String KEY_UID = "uid";
+	public static final String KEY_PRICE = "media_price";
+	public static final String KEY_CREATE_UID = "create_uid";	
+	
 	public static final String TYPE_DB_NAME = "com.mysql.jdbc.Driver";
 	private String name;
 	private String password;
@@ -109,5 +115,16 @@ public class BaseDB {
 				pst.setString(i + 1, (String) param.getValue());
 			}
 		}
+	}
+	
+	public DbParams getTime() {
+		
+//		DbParams p = new DbParams(KEY_TIME, System.currentTimeMillis() / 1000 + "");
+		DbParams p = new DbParams(KEY_TIME, getTime2());
+		return p;
+	}
+	
+	public String getTime2() {
+		return "1460304000";
 	}
 }

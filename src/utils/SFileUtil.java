@@ -16,10 +16,10 @@ public class SFileUtil {
 		FileInputStream fis = new FileInputStream(file);
 		InputStreamReader isr = new InputStreamReader(fis, "UTF-8");   
 		final BufferedReader br = new BufferedReader(isr);   
-			  new Thread(new Runnable() {
+//			  new Thread(new Runnable() {
 				
-				@Override
-				public void run() {
+//				@Override
+//				public void run() {
 					String line;
 					int index = 0;
 					boolean isRun = true;
@@ -38,8 +38,8 @@ public class SFileUtil {
 						
 					}
 					listener.onFinish();
-				}
-			}).start();
+//				}
+//			}).start();
 	}
 	
 	public interface ReadListener {

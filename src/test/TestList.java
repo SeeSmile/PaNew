@@ -23,9 +23,9 @@ public class TestList {
 			@Override
 			public int compare(Myc o1, Myc o2) {
 				if(o1.getAge() > o2.getAge()) {
-					return -1;
+					return 1;
 				}
-				return 1;
+				return -1;
 			}
 		});
 		System.out.println(list.toString());

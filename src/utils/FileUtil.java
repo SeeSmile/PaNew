@@ -14,44 +14,44 @@ public class FileUtil {
 	public static final String PATH_CODE = "c:\\images\\";
 	
 	/**
-	 * ÏÂÝdÖ¸¶¨urlµÄÎÄ¼þ
+	 * ï¿½ï¿½ï¿½dÖ¸ï¿½ï¿½urlï¿½ï¿½ï¿½Ä¼ï¿½
 	 * @param urlString url
-	 * @param filename ÎÄ¼þµÄÃû×Ö
-	 * @param savePath ±£´æµÄpath
+	 * @param filename ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	 * @param savePath ï¿½ï¿½ï¿½ï¿½ï¿½path
 	 * @throws Exception 
 	 */
 	public static void downloadFile(String urlString, String filename,
 			String savePath) throws IOException {
-		// ¹¹ÔìURL  
+		// ï¿½ï¿½ï¿½ï¿½URL  
 		URL url = new URL(urlString);
-		// ´ò¿ªÁ¬½Ó  
+		// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½  
 		URLConnection con = url.openConnection();
-		//ÉèÖÃÇëÇó³¬Ê±Îª5s  
+		//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±Îª5s  
 		con.setConnectTimeout(5 * 1000);
-		// ÊäÈëÁ÷  
+		// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½  
 		InputStream is = con.getInputStream();
-		// 1KµÄÊý¾Ý»º³å  
+		// 1Kï¿½ï¿½ï¿½ï¿½Ý»ï¿½ï¿½ï¿½  
 		byte[] bs = new byte[1024];
-		// ¶ÁÈ¡µ½µÄÊý¾Ý³¤¶È  
+		// ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý³ï¿½ï¿½ï¿½  
 		int len;
-		// Êä³öµÄÎÄ¼þÁ÷  
+		// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½  
 		File sf = new File(savePath);
 		if (!sf.exists()) {
 			sf.mkdirs();
 		}
 		OutputStream os = new FileOutputStream(sf.getPath() + "\\" + filename);
-		// ¿ªÊ¼¶ÁÈ¡  
+		// ï¿½ï¿½Ê¼ï¿½ï¿½È¡  
 		while ((len = is.read(bs)) != -1) {
 			os.write(bs, 0, len);
 		}
-		// Íê±Ï£¬¹Ø±ÕËùÓÐÁ´½Ó  
+		// ï¿½ï¿½Ï£ï¿½ï¿½Ø±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½  
 		os.close();
 		is.close();
 	}
 	
 	/**
-	 * ´´½¨µ±Ç°Òª±£´æµÄ¶þÎ¬ÂëÍ¼Æ¬µÄÎÄ¼þ
-	 * @return ¶þÎ¬ÂëÍ¼Æ¬ÎÄ¼þ
+	 * ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç°Òªï¿½ï¿½ï¿½ï¿½Ä¶ï¿½Î¬ï¿½ï¿½Í¼Æ¬ï¿½ï¿½ï¿½Ä¼ï¿½
+	 * @return ï¿½ï¿½Î¬ï¿½ï¿½Í¼Æ¬ï¿½Ä¼ï¿½
 	 */
 	public static File createCodeFile() {
 		return new File(PATH_CODE + System.currentTimeMillis() + ".jpg");
@@ -60,7 +60,7 @@ public class FileUtil {
 	public static void writeText2File(String fileName, String content) {   
         FileWriter writer = null;  
         try {     
-            // ´ò¿ªÒ»¸öÐ´ÎÄ¼þÆ÷£¬¹¹Ôìº¯ÊýÖÐµÄµÚ¶þ¸ö²ÎÊýtrue±íÊ¾ÒÔ×·¼ÓÐÎÊ½Ð´ÎÄ¼þ     
+           
             writer = new FileWriter(fileName, true);     
             writer.write("\r\n");
             writer.write(content);       
